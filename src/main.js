@@ -10,6 +10,4 @@ const app = createApp(App)
 app.use(router)
 app.mount('#app')
 
-
-
-//Agregar un JULIOSKII
+//HOLAAAdd 
