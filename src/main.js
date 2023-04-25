@@ -9,8 +9,3 @@ const app = createApp(App)
 
 app.use(router)
 app.mount('#app')
-
-//HOLAAAdd 1201
-
-//nadaajdajsdjkaka
-//3 comentario
