@@ -9,7 +9,7 @@
       <label for="exampleInputPassword1" class="form-label">Contresaña</label>
       <input type="password" class="form-control" id="exampleInputPassword1" v-model = "passCreate">
     </div>
-    <button type="submit" class="btn btn-primary" @click="createAccount(emailCreate,passCreate)">Guardar</button>
+    <button type="submit" class="btn btn-primary" @click="createAccount(emailCreate, passCreate)">Guardar</button>
   </form>
   
 </template>
@@ -48,6 +48,6 @@ import {callApiAxios} from '../../services/axios.ts';
         }
 
       }
-    },
+    }
   };
 </script>
