@@ -29,11 +29,6 @@ const routes = [
     path: '/new-password',
     name: 'NewPassword',
     component: NewPassword
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login
   }
  
  
