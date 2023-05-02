@@ -5,7 +5,7 @@ import Login from './components/Login/Login.vue'
 import NewPassword from './components/Login/NewPassword.vue'
 import ResetPassword from './components/Login/ResetPassword.vue'
 import Search from './components/Search/Search.vue'
-
+import NavbarCompany from './components/Navbar/NavbarCompany.vue'
 
 
 
@@ -34,6 +34,11 @@ const routes = [
     path: '/search',
     name: 'Search',
     component: Search
+  },
+  {
+    path: '/navbar-company',
+    name: 'NavbarCompany',
+    component: NavbarCompany
   }
  
  
