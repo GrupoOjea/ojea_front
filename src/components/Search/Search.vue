@@ -33,7 +33,7 @@
         class="list-group-item"
         style="background-color: #5c5b5b; color: white;"
       >
-        Empleos que quizás te puedan interesar ({{ dataLength }})
+        Personas que quizás te puedan interesar ({{ dataLength }})
       </li>
     </ul>
     <ul
