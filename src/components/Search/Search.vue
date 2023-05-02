@@ -1,4 +1,5 @@
 <template>
+  <div> <NavbarCompany> </NavbarCompany></div>
   <div class="container">
     <div class="row mt-5">
       <div class="col-4 text-center">
@@ -58,6 +59,7 @@
 </template>
 
 <script>
+  import NavbarCompany from './../Navbar/NavbarCompany.vue'
   import { callApiAxios } from "../../services/axios";
   import Loading from "vue-loading-overlay";
   import "vue-loading-overlay/dist/css/index.css";
@@ -76,6 +78,7 @@
     },
     components: {
       Loading,
+      NavbarCompany
     },
 
     mounted() {
