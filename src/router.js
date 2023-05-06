@@ -6,7 +6,7 @@ import NewPassword from './components/Login/NewPassword.vue'
 import ResetPassword from './components/Login/ResetPassword.vue'
 import Search from './components/Search/Search.vue'
 import NavbarCompany from './components/Navbar/NavbarCompany.vue'
-
+import ProfileCompany from './components/Profile/ProfileCompany.vue'
 
 
 const routes = [
@@ -39,6 +39,11 @@ const routes = [
     path: '/navbar-company',
     name: 'NavbarCompany',
     component: NavbarCompany
+  },
+  {
+    path: '/profile-company',
+    name: 'ProfileCompany',
+    component: ProfileCompany
   }
  
  

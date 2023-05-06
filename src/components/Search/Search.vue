@@ -23,7 +23,7 @@
         />
       </div>
       <div class="col-4">
-        <button type="button" class="btn btn-primary" @click="jobsDefault(dataSearcher, dataWhere)">Buscar</button>
+        <button type="button" class="btn btn-primary" @click="getSearcher(dataSearcher, dataWhere)">Buscar</button>
       </div>
     </div>
   </div>
@@ -42,18 +42,15 @@
       v-for="(item, index) in dataSearch"
       :key="index"
     >
+
       <li class="list-group-item">
-        <b>Python, Nest, MySQL</b>
-        <br />
-        Ingeniero en informatica
-        <li class="list-group-item">
-    <b>{{ item.texto_habilidades }}</b>
-    <br>
-    {{ item.titulo }} - {{ item.institucion }}
-    <br>
-    {{ item.comuna }}, {{ item.region }}
-  </li>
+        <b>{{ item.texto_habilidades }}</b>
+        <br>
+        {{ item.titulo }} - {{ item.institucion }}
+        <br>
+        {{ item.comuna }}, {{ item.region }}
       </li>
+
     </ul>
   </div>
 </template>
@@ -82,16 +79,15 @@
     },
 
     mounted() {
-      this.jobsDefault();
+      this.getSearcher();
     },
     methods: {
-      async jobsDefault(dataSearcher, dataWhere) {
+      async getSearcher(dataSearcher, dataWhere) {
         let responseAxios = await callApiAxios("get", "http://localhost:3000/profile/get", {
           buscador: dataSearcher ,
           donde: dataWhere,
         });
-        console.log("Respuesta completa:", responseAxios); // Agrega esta línea
-        console.log("Que entrega", dataSearcher, responseAxios);
+
         if (responseAxios.status == 200) {
           this.dataSearch = responseAxios.data;
           this.dataLength = this.dataSearch.length;
