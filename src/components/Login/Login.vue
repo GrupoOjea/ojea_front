@@ -83,7 +83,7 @@ export default {
        localStorage.setItem('id', id)
        localStorage.setItem('estado', estado)
        console.log(id)
-       this.$router.push('/');
+       this.$router.push('/search');
       }
       else{
       localStorage.setItem('estado', estado)
@@ -92,7 +92,6 @@ export default {
       localStorage.setItem('token', token)
       localStorage.setItem('nombre', nombre)
       this.setLocalStorage();
-      this.$router.push('/');
       }
   
      }
