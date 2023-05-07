@@ -1,5 +1,5 @@
 <template>
-
+  <div> <NavbarCompany> </NavbarCompany></div>
   <div class="card" style="margin: 26px">
     <div class="card-body">
       <h4>Mi perfil</h4>
@@ -37,6 +37,7 @@
   import {callApiAxios} from '../../services/axios';
   import Loading from 'vue-loading-overlay';
   import 'vue-loading-overlay/dist/css/index.css';
+  import NavbarCompany from './../Navbar/NavbarCompany.vue'
 
   export default {
     data() {
@@ -47,7 +48,8 @@
       };
     },
     components: {
-      Loading
+      Loading,
+      NavbarCompany
     },
     mounted() {
       this.getCompany();
