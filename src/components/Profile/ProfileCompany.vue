@@ -99,9 +99,8 @@
     methods: {
       async getCompany() {
         this.isLoading = true;
-        //const id = this.$route.params.id;
-        //console.log(id);
-        let responseAxios = await callApiAxios('get', `http://localhost:3000/company/16`, {});
+        const id = localStorage.getItem('id');
+        let responseAxios = await callApiAxios('get', `http://localhost:3000/company/${id}`, {});
 
         this.isLoading = false;
         if (responseAxios.status == 200) {
