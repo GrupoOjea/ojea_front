@@ -16,7 +16,7 @@
 
 <script>
 
-import {callApiAxios} from '../../services/axios.ts';
+  import {callApiAxios} from '../../services/axios.ts';
 
   export default {
     data() {

@@ -2,13 +2,13 @@
   <div>
     <NavbarCompany></NavbarCompany>
   </div>
-  <div class="card" style="margin: 26px">
+  <div class="card" style="margin: 15px">
     <div class="card-body">
       <h4>Mi perfil</h4>
     </div>
   </div>
 
-  <div class="row row d-flex align-items-stretch" style="margin: 15px">
+  <div class="row row d-flex align-items-stretch" style="margin: 5px">
     <div class="col-sm-6">
       <div class="card h-100">
         <div class="card-body text-center position-relative">

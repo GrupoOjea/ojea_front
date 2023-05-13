@@ -1,11 +1,11 @@
 <template>
   <div> <NavbarCompany> </NavbarCompany></div>
-  <div class="card" style="margin: 26px">
+  <div class="card" style="margin: 15px">
     <div class="card-body">
       <h4>Publicar empleo</h4>
     </div>
   </div>
-  <div class="card" style="margin: 26px">
+  <div class="card" style="margin: 15px">
     <div class="card-body">
       <form>
         <div class="form-row">

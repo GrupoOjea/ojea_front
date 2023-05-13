@@ -30,7 +30,7 @@
                 </router-link>
               </li>
               <li>
-                <router-link :class="{ active: isActiveRoute('/search') }" to="/search" class="dropdown-item">
+                <router-link :class="{ active: isActiveRoute('/jobs') }" to="/jobs" class="dropdown-item">
                   Empleos publicados
                 </router-link>
               </li>
