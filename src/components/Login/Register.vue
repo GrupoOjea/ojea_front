@@ -16,13 +16,13 @@
 
 <script>
 
-import {callApiAxios} from '../../services/axios.ts';
+  import {callApiAxios} from '../../services/axios.ts';
 
   export default {
     data() {
       return {
-        emailCreate : null,
-        passCreate : null
+        emailCreate: null,
+        passCreate: null
       };
     },
     components: {
@@ -32,7 +32,7 @@ import {callApiAxios} from '../../services/axios.ts';
       
     },
     methods: {
-      async createAccount(emailCreate,passCreate){
+      async createAccount(emailCreate, passCreate){
 
         let responseAxios = await callApiAxios('post','http://localhost:3000/login/create',{
           'tipo_perfil':1,

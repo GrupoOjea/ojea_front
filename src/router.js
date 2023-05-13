@@ -7,7 +7,8 @@ import ResetPassword from './components/Login/ResetPassword.vue'
 import Search from './components/Search/Search.vue'
 import NavbarCompany from './components/Navbar/NavbarCompany.vue'
 import ProfileCompany from './components/Profile/ProfileCompany.vue'
-
+import FormJob from './components/Form/FormJob.vue'
+import Jobs from './components/Jobs/Jobs.vue'
 
 const routes = [
   {
@@ -44,6 +45,16 @@ const routes = [
     path: '/profile-company',
     name: 'ProfileCompany',
     component: ProfileCompany
+  },
+  {
+    path: '/form-job',
+    name: 'FormJob',
+    component: FormJob
+  },
+  {
+    path: '/jobs',
+    name: 'Jobs',
+    component: Jobs
   }
  
  
