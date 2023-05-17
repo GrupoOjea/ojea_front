@@ -93,7 +93,9 @@
     methods: {
       
       async createJob(cargoTxt, contratoSelect, jornadaSelect, experienciaSelect, modalidadSelect, aptitudesTxt, descripcionTxt){
+        
         try {
+          const id_company = parseInt(localStorage.getItem('id_company'));
           const responseAxios = await callApiAxios('post','http://localhost:3000/jobs/create',{
             'cargo': cargoTxt,
             'contrato': contratoSelect,
@@ -102,7 +104,7 @@
             'modalidad': modalidadSelect,
             'aptitudes': aptitudesTxt,
             'descripcion': descripcionTxt,
-            'fk_empresa': 1
+            'fk_empresa': id_company
           });
           
           if (responseAxios.status == 201) {
