@@ -1,5 +1,6 @@
 <template>
 <div class="content" style="margin: 25px">
+  <button @click="goBack" class="back-button"><i class="fa-solid fa-arrow-left"></i></button>
   <loading v-model:active="isLoading"
                  :can-cancel="true"
                  :is-full-page="fullPage"/>
@@ -69,7 +70,10 @@ export default {
   },
   methods: {
 
-  async login(email, pass){
+    goBack() {
+    this.$router.push('/');},
+
+   async login(email,pass){
     this.isLoading = true;
     let responseAxios = await callApiAxios('post','http://localhost:3000/login/session',{
       'email':email,
@@ -126,5 +130,23 @@ export default {
 };
 </script>
 
+<style scoped>
+  .back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    z-index: 1000; /* esto asegura que el botón siempre esté en la parte superior */
+  }
+
+  .back-button:hover {
+    background-color: #eee;
+  }
+  /* tus otros estilos */
+</style>
 
 
