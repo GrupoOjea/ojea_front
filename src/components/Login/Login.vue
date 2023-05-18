@@ -78,45 +78,55 @@ export default {
     let responseAxios = await callApiAxios('post','http://localhost:3000/login/session',{
       'email':email,
       'clave':pass,
-      });
-      this.isLoading = false;
-      console.log(responseAxios)
-     if(responseAxios.status == '201'){
-     let {token,estado,estatus_registro,tipo_perfil,nombre,id} = responseAxios.data
-     if(responseAxios.data.estado == 0){
-       localStorage.setItem('id', id)
-       localStorage.setItem('estado', estado)
-       console.log(id)
-       this.$router.push('/search');
+    });
+    this.isLoading = false;
+    console.log(responseAxios.data)
+    if(responseAxios.status == '201'){
+      let {token, estado, estatus_registro, tipo_perfil, nombre, id} = responseAxios.data
+
+      if(responseAxios.data.estado == 0){
+        localStorage.setItem('id', id)
+        localStorage.setItem('estado', estado)
+        localStorage.setItem('tipo', tipo_perfil)
+
+        if(tipo_perfil == 2){ 
+          const getInformationCompany = await callApiAxios('get',`http://localhost:3000/company/${id}`,{});
+          let id_company = getInformationCompany.data.id
+          localStorage.setItem('id_company', id_company)
+        }
+
+        console.log(id)
+        this.$router.push('/search');
       }
       else{
-      localStorage.setItem('estado', estado)
-      localStorage.setItem('estatus_registro', estatus_registro)
-      localStorage.setItem('tipo_perfil', tipo_perfil)
-      localStorage.setItem('token', token)
-      localStorage.setItem('nombre', nombre)
-      this.setLocalStorage();
+        localStorage.setItem('estado', estado)
+        localStorage.setItem('estatus_registro', estatus_registro)
+        localStorage.setItem('tipo_perfil', tipo_perfil)
+        localStorage.setItem('token', token)
+        localStorage.setItem('nombre', nombre)
+        this.setLocalStorage();
       }
   
-     }
-    },
-    setLocalStorage() {
-      // Establece un objeto en el almacenamiento local
-      const data = { name: 'ejemplo', age: 30 };
-      localStorage.setItem('data', JSON.stringify(data));
-
-      // Espera 1 hora antes de borrar el objeto del almacenamiento local
-      setTimeout(() => {
-        localStorage.removeItem('data');
-        localStorage.clear();
-        alert("Session caducada")
-        window.location.reload();
-        
-        // Agrega una notificación o mensaje para informar al usuario que se ha borrado el objeto del almacenamiento local
-      }, 3600000); // 1 hora = 3600000 milisegundos
     }
+  },
+    
+  setLocalStorage() {
+    // Establece un objeto en el almacenamiento local
+    const data = { name: 'ejemplo', age: 30 };
+    localStorage.setItem('data', JSON.stringify(data));
 
-},
+    // Espera 1 hora antes de borrar el objeto del almacenamiento local
+    setTimeout(() => {
+      localStorage.removeItem('data');
+      localStorage.clear();
+      alert("Session caducada")
+      window.location.reload();
+      
+      // Agrega una notificación o mensaje para informar al usuario que se ha borrado el objeto del almacenamiento local
+    }, 3600000); // 1 hora = 3600000 milisegundos
+  }
+
+  },
 };
 </script>
 
