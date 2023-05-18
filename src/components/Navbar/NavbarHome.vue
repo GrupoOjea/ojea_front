@@ -10,7 +10,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/search">Buscar profesional</a>
+            <!--a class="nav-link active" aria-current="page" href="/search">Buscar profesional</a-->
           </li>
         </ul>
 
@@ -22,11 +22,11 @@
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
                 <router-link
-                  :class="{ active: isActiveRoute('/profile-company') }"
-                  to="/profile-company" class="dropdown-item">Mi perfil
+                  :class="{ active: isActiveRoute('/login') }"
+                  to="/login" class="dropdown-item">Iniciar sesión
                 </router-link>
               </li>
-              <li>
+              <!--li>
                 <router-link
                   :class="{ active: isActiveRoute('/jobs') }"
                   to="/jobs" class="dropdown-item">Empleos publicados
@@ -41,14 +41,14 @@
               <li><hr class="dropdown-divider" /></li>
               <li>
                 <a class="dropdown-item" href="#" @click="closeSession">Cerrar sesión</a>
-              </li>
+              </li-->
             </ul>
           </li>
           <li class="nav-item">
             <router-link to="/register" class="nav-link"></router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/" class="nav-link"></router-link>
+            <router-link to="/login" class="nav-link"></router-link>
           </li>
         </ul>
       </div>
@@ -63,7 +63,7 @@ export default {
   methods:{
     closeSession(){
       localStorage.clear();
-      this.$router.push('/');
+      this.$router.push('/login');
     },
     isActiveRoute(route) {
       return this.$route.path === route;
