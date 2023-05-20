@@ -16,10 +16,9 @@
 
         <ul class="nav navbar-nav pull-xs-right">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Mi cuenta
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 15px;">
+              {{nombre}}</a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <li>
                 <router-link
                   :class="{ active: isActiveRoute('/profile-company') }"
@@ -38,17 +37,17 @@
                   to="/form-job" class="dropdown-item">Publicar empleo
                 </router-link>
               </li>
+              <li>
+                <router-link
+                  :class="{ active: isActiveRoute('/interaction') }"
+                  to="/interaction" class="dropdown-item">Interaccion
+                </router-link>
+              </li>
               <li><hr class="dropdown-divider" /></li>
               <li>
                 <a class="dropdown-item" href="#" @click="closeSession">Cerrar sesión</a>
               </li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <router-link to="/register" class="nav-link"></router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/" class="nav-link"></router-link>
           </li>
         </ul>
       </div>
@@ -57,8 +56,25 @@
 </template>
   
 <script>
+import { callApiAxios } from '../../services/axios';
 export default {
+  data() {
+      return {
+        nombre: 'No tiene usuario empresa'
+
+        };
+    },
   components: {
+  },
+  async mounted() {
+    try {
+      const nombreFromStorage = localStorage.getItem('nombre');
+      if (nombreFromStorage) {
+        this.nombre = nombreFromStorage;
+      }
+    } catch (error) {
+      console.error('Error en loginCompany:', error);
+    }
   },
   methods:{
     closeSession(){
@@ -73,14 +89,15 @@ export default {
 </script>
 
 <style scoped>
-.dropdown-item {
-  white-space: normal;
-  word-wrap: break-word;
+
+
+.dropdown-menu {
+  max-width: 100vw;  
+  overflow-x: auto;  
 }
 
-.dropdown-item.active {
-  font-weight: bold;
-  background-color: #01203f;
+.dropdown-item {
+  white-space: pre-wrap; 
 }
 
 .navbar-brand img {

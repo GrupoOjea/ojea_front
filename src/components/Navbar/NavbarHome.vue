@@ -10,46 +10,21 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <!--a class="nav-link active" aria-current="page" href="/search">Buscar profesional</a-->
           </li>
         </ul>
-
         <ul class="nav navbar-nav pull-xs-right">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Mi cuenta
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                <router-link
-                  :class="{ active: isActiveRoute('/login') }"
-                  to="/login" class="dropdown-item">Iniciar sesión
-                </router-link>
-              </li>
-              <!--li>
-                <router-link
-                  :class="{ active: isActiveRoute('/jobs') }"
-                  to="/jobs" class="dropdown-item">Empleos publicados
-                </router-link>
-              </li>
-              <li>
-                <router-link
-                  :class="{ active: isActiveRoute('/form-job') }"
-                  to="/form-job" class="dropdown-item">Publicar empleo
-                </router-link>
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item" href="#" @click="closeSession">Cerrar sesión</a>
-              </li-->
-            </ul>
-          </li>
           <li class="nav-item">
-            <router-link to="/register" class="nav-link"></router-link>
+            <router-link
+              :class="{ active: isActiveRoute('/login') }"
+              to="/login" class="nav-link">Iniciar sesión
+            </router-link>
           </li>
-          <li class="nav-item">
-            <router-link to="/login" class="nav-link"></router-link>
-          </li>
+          <!--li class="nav-item">
+            <router-link
+              :class="{ active: isActiveRoute('/register') }"
+              to="/register" class="nav-link">Registrarse
+            </router-link>
+          </li-->
         </ul>
       </div>
     </div>

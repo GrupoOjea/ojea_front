@@ -47,6 +47,7 @@
   </div>
 </template>
 <script>
+import Swal from 'sweetalert2';
 import {callApiAxios} from '../../services/axios';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
@@ -73,42 +74,75 @@ export default {
     goBack() {
     this.$router.push('/');},
 
-   async login(email,pass){
-    this.isLoading = true;
-    let responseAxios = await callApiAxios('post','http://localhost:3000/login/session',{
-      'email':email,
-      'clave':pass,
+    async login(email, pass) {
+  this.isLoading = true;
+
+  // Comprueba si los campos de entrada están vacíos
+  if(!email || !pass){
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Por favor, ingrese datos válidos.',
     });
     this.isLoading = false;
-    console.log(responseAxios.data)
-    if(responseAxios.status == '201'){
-      let {token, estado, estatus_registro, tipo_perfil, nombre, id} = responseAxios.data
+    return;
+  }
 
-      if(responseAxios.data.estado == 0){
-        localStorage.setItem('id', id)
-        localStorage.setItem('estado', estado)
-        localStorage.setItem('tipo', tipo_perfil)
+  let responseAxios = await callApiAxios('post', 'http://localhost:3000/login/session', {
+    'email': email,
+    'clave': pass,
+  });
+  this.isLoading = false;
+  if (responseAxios.status == '201') {
+    let { token, estado, estatus_registro, tipo_perfil, nombre, id } = responseAxios.data
 
-        if(tipo_perfil == 2){ 
-          const getInformationCompany = await callApiAxios('get',`http://localhost:3000/company/${id}`,{});
-          let id_company = getInformationCompany.data.id
-          localStorage.setItem('id_company', id_company)
+    if (estado == 0) {
+      // Guardar datos en localstorage
+      localStorage.setItem('id', id);
+      localStorage.setItem('estado', estado);
+      localStorage.setItem('tipo', tipo_perfil);
+
+      if (tipo_perfil == 2) {
+        try {
+          const getInformationCompany = await callApiAxios('get', `http://localhost:3000/company/${id}`, {});
+          if (getInformationCompany && getInformationCompany.data) {
+            let id_company = getInformationCompany.data.id;
+            let nombre = getInformationCompany.data.nombre;
+            localStorage.setItem('id_company', id_company);
+            localStorage.setItem('nombre', nombre);
+            this.$router.push('/search');
+          } else {
+            console.log("La respuesta de la API no tiene el formato esperado");
+          }
+        } catch (error) {
+          console.log('Error en la llamada a la API:', error);
         }
-
-        console.log(id)
-        this.$router.push('/search');
+      } else {
+        // Usuario no es de tipo 2, mostrar modal
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'El usuario ingresado no tiene perfil de empresa.',
+        });
       }
-      else{
-        localStorage.setItem('estado', estado)
-        localStorage.setItem('estatus_registro', estatus_registro)
-        localStorage.setItem('tipo_perfil', tipo_perfil)
-        localStorage.setItem('token', token)
-        localStorage.setItem('nombre', nombre)
-        this.setLocalStorage();
-      }
-  
+    } else if (!token) {
+    // La contraseña no es válida o el usuario no fue encontrado
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'El usuario no fue encontrado o la contraseña es incorrecta.',
+    });
+    return;
+    } else {
+      localStorage.setItem('estado', estado);
+      localStorage.setItem('estatus_registro', estatus_registro);
+      localStorage.setItem('tipo_perfil', tipo_perfil);
+      localStorage.setItem('token', token);
+      localStorage.setItem('nombre', nombre);
+      this.setLocalStorage();
     }
-  },
+  }
+},
     
   setLocalStorage() {
     // Establece un objeto en el almacenamiento local
