@@ -1,12 +1,12 @@
 <template>
+  <div class="background-image">
   <div>
     <NavbarCompany></NavbarCompany>
     <Loading v-model:active="isLoading"
                  :can-cancel="true"
                  :is-full-page="fullPage"></Loading>
   </div>
-
-<div class="card" style="margin: 26px">
+  <div class="card my-list" style="margin: 26px">
     <div class="card-body">
       <h4>Mi perfil</h4>
     </div>
@@ -14,7 +14,7 @@
   <div class="container-fluid-a">
   <div class="row align-items-stretch" style="margin: 15px" v-if="!isLoading && Object.keys(dataCompany).length !== 0">
       <div class="col-sm-6">
-        <div class="card h-100">
+        <div class="card h-100 my-list">
           <div class="card-body text-center position-relative">
             <i
               v-if="!editing.info"
@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="col-sm-6">
-        <div class="card  h-100">
+        <div class="card  h-100 my-list">
           <div class="card-body position-relative">
             <i
               v-if="!editing.about"
@@ -74,6 +74,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -127,7 +128,27 @@
     },
   };
 </script>
-<style>
+
+<style scoped>
+.icon-button {
+  color: black;
+}
+
+.background-image{
+  background-image: url('../../images/undraw_remotely_2j6y.svg');
+   background-size: cover;
+   background-repeat: no-repeat;
+   
+}
+
+.color-table{
+  background-color: rgba(17, 68, 112, 0.397);
+}
+
+.my-list{
+  background-color: #f8f8f886;
+}
+
 .container-fluid-a {
   height: 78vh;
 }
@@ -141,4 +162,3 @@
 }
 
 </style>
-
