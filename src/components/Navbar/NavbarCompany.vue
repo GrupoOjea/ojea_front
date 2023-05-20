@@ -1,8 +1,8 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light navbar-c">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
-      <img src="../../images/Logo_OJEA.png" alt="Ojea">
+      <img src="../../images/Logo_OJEA1.png" alt="Ojea">
      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -10,7 +10,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/search">Buscar profesional</a>
+            <a class="nav-link active" aria-current="page" href="/search"><i class="fa-solid fa-magnifying-glass icon-lupa" style="color: #0a0a0a;"></i>  Buscar profesional</a>
           </li>
         </ul>
 
@@ -48,7 +48,7 @@
             <router-link to="/register" class="nav-link"></router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/" class="nav-link"></router-link>
+            <router-link to="/login" class="nav-link"></router-link>
           </li>
         </ul>
       </div>
@@ -63,7 +63,7 @@ export default {
   methods:{
     closeSession(){
       localStorage.clear();
-      this.$router.push('/');
+      this.$router.push('/login');
     },
     isActiveRoute(route) {
       return this.$route.path === route;
@@ -84,6 +84,20 @@ export default {
 }
 
 .navbar-brand img {
-      height: 50px;
+      max-height: 50px;
+       width: auto;
+        object-fit: contain;
     }
+
+.icon-lupa {
+      margin-right: 10px;
+}
+
+.navbar-c {
+  background-color: #6d63ffa9;
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: large;
+     font-weight: 700;
+  
+}
 </style>

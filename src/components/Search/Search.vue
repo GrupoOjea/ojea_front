@@ -1,4 +1,5 @@
 <template>
+  <div class="background-image">
   <div> <NavbarCompany> </NavbarCompany></div>
   <div class="container">
     <div class="row mt-5">
@@ -23,10 +24,11 @@
         />
       </div>
       <div class="col-4">
-        <button type="button" class="btn btn-primary" @click="getSearcher(dataSearcher, dataWhere)">Buscar</button>
+        <button type="button" class="btn btn-primary btn-buscar" @click="getSearcher(dataSearcher, dataWhere)">Buscar</button>
       </div>
     </div>
   </div>
+  
 
   <div class="card" style="margin: 15px" v-if="showCard">
     <ul class="list-group list-group-flush">
@@ -53,6 +55,7 @@
 
     </ul>
   </div>
+</div>
 </template>
 
 <script>
@@ -99,3 +102,25 @@
     },
   };
  </script>
+
+<style scoped>
+.btn-buscar {
+  background-color: #6d63ffa9;
+  
+}
+
+.btn-buscar:hover {
+  background-color: #6d63ff;
+  
+}
+
+.background-image{
+  background-image: url('../../images/undraw_remotely_2j6y.svg');
+   background-size: cover;
+   background-repeat: no-repeat;
+}
+
+.color-table{
+  background-color: rgba(17, 68, 112, 0.397);
+}
+</style>
