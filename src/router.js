@@ -9,7 +9,7 @@ import NavbarCompany from './components/Navbar/NavbarCompany.vue'
 import ProfileCompany from './components/Profile/ProfileCompany.vue'
 import FormJob from './components/Form/FormJob.vue'
 import Jobs from './components/Jobs/Jobs.vue'
-
+import Interaction from './components/Interaction/Interaction.vue'
 const routes = [
   {
     path: '/',
@@ -55,6 +55,11 @@ const routes = [
     path: '/jobs',
     name: 'Jobs',
     component: Jobs
+  },
+  {
+    path: '/interaction',
+    name: 'interaction',
+    component: Interaction
   }
  
  

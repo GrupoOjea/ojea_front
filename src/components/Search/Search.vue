@@ -30,10 +30,10 @@
   </div>
   
 
-  <div class="card" style="margin: 15px" v-if="showCard">
+  <div class="card my-list" style="margin: 15px" v-if="showCard">
     <ul class="list-group list-group-flush">
       <li
-        class="list-group-item"
+        class="list-group-item my-list"
         style="background-color: #5c5b5b; color: white;"
       >
         Personas que quizás te puedan interesar ({{ dataLength }})
@@ -45,7 +45,7 @@
       :key="index"
     >
 
-      <li class="list-group-item">
+      <li class="list-group-item my-list">
         <b>{{ item.texto_habilidades }}</b>
         <br>
         {{ item.titulo }} - {{ item.institucion }}
@@ -118,9 +118,11 @@
   background-image: url('../../images/undraw_remotely_2j6y.svg');
    background-size: cover;
    background-repeat: no-repeat;
+   height: 100vh;
+   min-height: 100%;
 }
 
-.color-table{
-  background-color: rgba(17, 68, 112, 0.397);
+.my-list{
+  background-color: #f8f8f886;
 }
 </style>
