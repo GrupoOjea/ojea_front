@@ -79,7 +79,7 @@ export default {
   methods:{
     closeSession(){
       localStorage.clear();
-      this.$router.push('/login');
+      this.$router.push('/');
     },
     isActiveRoute(route) {
       return this.$route.path === route;
