@@ -1,16 +1,18 @@
 <template>
+  <div class="background-image">
   <div>
     <NavbarCompany></NavbarCompany>
   </div>
-  <div class="card" style="margin: 15px">
+   
+  <div class="card my-list" style="margin: 15px">
     <div class="card-body">
       <h4>Empleos publicados</h4>
     </div>
   </div>
 
-  <div class="card" style="margin: 15px">
+  <div class="card my-list" style="margin: 15px">
     <ul class="list-group list-group-flush">
-      <li class="list-group-item" v-for="job in jobs" :key="job.id">
+      <li class="list-group-item my-list" v-for="job in jobs" :key="job.id">
         <div class="d-flex justify-content-between align-items-start">
           <div>
             <b>{{ job.nombre }}</b>
@@ -32,6 +34,7 @@
       </li>
     </ul>
   </div>
+</div>
 </template>
 
 <script>
@@ -144,5 +147,19 @@ export default {
 <style scoped>
 .icon-button {
   color: black;
+}
+
+.background-image{
+  background-image: url('../../images/undraw_remotely_2j6y.svg');
+   background-size: cover;
+   background-repeat: no-repeat;
+}
+
+.color-table{
+  background-color: rgba(17, 68, 112, 0.397);
+}
+
+.my-list{
+  background-color: #f8f8f886;
 }
 </style>

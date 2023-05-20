@@ -1,11 +1,12 @@
 <template>
+  <div class="background-image">
   <div> <NavbarCompany> </NavbarCompany></div>
-  <div class="card" style="margin: 15px">
+  <div class="card my-list" style="margin: 15px">
     <div class="card-body">
       <h4>Publicar empleo</h4>
     </div>
   </div>
-  <div class="card" style="margin: 15px">
+  <div class="card my-list" style="margin: 15px">
     <div class="card-body">
       <form>
         <div class="form-row">
@@ -64,7 +65,7 @@
       </form>
     </div>
   </div>
-
+</div>
 </template>
 
 <script>
@@ -120,3 +121,23 @@
     }
   };
 </script>
+
+<style scoped>
+.icon-button {
+  color: black;
+}
+
+.background-image{
+  background-image: url('../../images/undraw_remotely_2j6y.svg');
+   background-size: cover;
+   background-repeat: no-repeat;
+}
+
+.color-table{
+  background-color: rgba(17, 68, 112, 0.397);
+}
+
+.my-list{
+  background-color: #f8f8f8d5;
+}
+</style>
