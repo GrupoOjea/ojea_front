@@ -57,7 +57,7 @@ const routes = [
     component: Jobs
   },
   {
-    path: '/interaction',
+    path: '/interaction/:id',
     name: 'interaction',
     component: Interaction
   }

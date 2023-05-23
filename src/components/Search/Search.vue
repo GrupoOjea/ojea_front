@@ -105,12 +105,10 @@
 
 <style scoped>
 .btn-buscar {
-  background-color: #6d63ffa9;
-  
-}
-
-.btn-buscar:hover {
   background-color: #6d63ff;
+}
+.btn-buscar:hover {
+  background-color: #6d63ffa9;
   
 }
 
