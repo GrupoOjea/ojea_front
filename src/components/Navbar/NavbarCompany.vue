@@ -37,12 +37,6 @@
                   to="/form-job" class="dropdown-item">Publicar empleo
                 </router-link>
               </li>
-              <li>
-                <router-link
-                  :class="{ active: isActiveRoute('/interaction') }"
-                  to="/interaction" class="dropdown-item">Interaccion
-                </router-link>
-              </li>
               <li><hr class="dropdown-divider" /></li>
               <li>
                 <a class="dropdown-item" href="#" @click="closeSession">Cerrar sesión</a>
@@ -56,7 +50,6 @@
 </template>
   
 <script>
-import { callApiAxios } from '../../services/axios';
 export default {
   data() {
       return {
@@ -105,6 +98,15 @@ export default {
        width: auto;
         object-fit: contain;
     }
+.dropdown-menu .active {
+  background-color: #6d63ffa9;
+}
+.dropdown-menu .dropdown-item:active {
+  background-color: #6d63ffa9;
+}
+.dropdown-menu .dropdown-item:hover {
+  background-color: #6d63ff34;
+}
 
 .icon-lupa {
       margin-right: 10px;

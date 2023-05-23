@@ -61,7 +61,7 @@
 
         </div>
         <br>
-        <button type="submit" class="btn btn-primary"  @click="createJob(cargoTxt, contratoSelect, jornadaSelect, experienciaSelect, modalidadSelect, aptitudesTxt, descripcionTxt)">Finalizar</button>
+        <button type="submit" class="btn btn-primary"  @click.prevent="createJob(cargoTxt, contratoSelect, jornadaSelect, experienciaSelect, modalidadSelect, aptitudesTxt, descripcionTxt)">Finalizar</button>
       </form>
     </div>
   </div>
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-  
+  import Swal from 'sweetalert2';
   import NavbarCompany from './../Navbar/NavbarCompany.vue'
   import {callApiAxios} from '../../services/axios.ts';
 
@@ -93,8 +93,28 @@
     },
     methods: {
       
+      validateForm() {
+      const fields = ['cargoTxt', 'contratoSelect', 'jornadaSelect', 'experienciaSelect', 'modalidadSelect', 'aptitudesTxt', 'descripcionTxt'];
+
+      for (let field of fields) {
+        if (!this[field]) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+
       async createJob(cargoTxt, contratoSelect, jornadaSelect, experienciaSelect, modalidadSelect, aptitudesTxt, descripcionTxt){
-        
+        event.preventDefault();
+        if (!this.validateForm()) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Por favor completa todos los campos antes de enviar.'
+        });
+        return;
+      }
         try {
           const id_company = parseInt(localStorage.getItem('id_company'));
           const responseAxios = await callApiAxios('post','http://localhost:3000/jobs/create',{
@@ -109,7 +129,13 @@
           });
           
           if (responseAxios.status == 201) {
-            window.alert("Registro insertado exitosamente");
+            Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: 'Registro insertado exitosamente'
+          }).then(() => {
+            location.reload();
+          });
           } else {
             console.log("Hubo un error al insertar el registro");
           }

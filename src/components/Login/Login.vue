@@ -34,7 +34,7 @@
                   </span> 
               </div>
 
-              <button type="submit" class="btn btn-block btn-primary"  @click="login(emailLogin, passwordLogin)">Ingresar</button>
+              <button type="submit" class="btn btn-block btn-primary btn-login"  @click="login(emailLogin, passwordLogin)">Ingresar</button>
     
             </form>
             </div>
@@ -174,13 +174,21 @@ export default {
     padding: 10px;
     cursor: pointer;
     border-radius: 5px;
-    z-index: 1000; /* esto asegura que el botón siempre esté en la parte superior */
+    z-index: 1000; 
   }
 
   .back-button:hover {
     background-color: #eee;
   }
-  /* tus otros estilos */
+
+  .btn-login {
+  background-color: #6d63ff;
+}
+.btn-login:hover {
+  background-color: #6d63ffa9;
+  
+}
+
 </style>
 
 

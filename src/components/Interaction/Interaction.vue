@@ -5,6 +5,8 @@
     <div class="card" style="margin: 15px">
       <div class="card-body">
         <h4>Interacción</h4>
+        <p>Personas que postularon a este empleo ({{ postulado }})</p>
+        <p>Personas que guardaron este empleo ({{ guardado }})</p>
       </div>
     </div>
   
@@ -13,20 +15,19 @@
         <li class="list-group-item" v-for="job in jobs" :key="job.id">
           <div class="d-flex justify-content-between align-items-start">
             <div>
-              <b>{{ job.nombre }}</b>
+              <b>{{ job.texto_habilidades }}</b>
               <br>
-              {{ job.cargo }}
+              {{ job.titulo }} - {{ job.institucion }}
               <br>
-              {{ job.comuna }} ({{ job.modalidad }})
+              {{ job.comuna }}, {{ job.region }}
             </div>
             <div>
-              <button class="btn btn-link icon-button" @click="showEditModal(job)">
-                <i class="fa-sharp fa-solid fa-file-pdf"></i>
+              <button class="btn btn-link icon-button" @click="showViewModal()">
+                <i class="fa-regular fa-file"></i>
               </button>
-              <button class="btn btn-link icon-button ml-2" @click="showSendMailModal(job)">
-                <i class="fa-solid fa-envelope"></i>
-              </button>
-              
+              <!--button class="btn btn-link icon-button ml-2" @click="showSendMailModal(job)">
+                <i class="fa-regular fa-envelope"></i>
+              </button-->              
             </div>
           </div>
         </li>
@@ -38,21 +39,69 @@
   import Swal from 'sweetalert2';
   import NavbarCompany from './../Navbar/NavbarCompany.vue';
   import {callApiAxios} from '../../services/axios.ts';
+  import pdfFile from '@/assets/pdf/formulario_cv.pdf';
   
   export default {
     data() {
       return {
         jobs: [],
         selectedJob: null,
+        jobId: null,
+        postulado: null,
+        guardado: null,
       };
     },
     components: {
       NavbarCompany
     },
     async mounted() {
-      this.jobs = await this.fetchData(1);  
+      this.jobId = Number(this.$route.params.id);
+      this.jobs = await this.getInformation();  
+      this.getPostulation();
     },
     methods: {
+
+      async getPostulation() {
+        let responseAxios = await callApiAxios("get", `http://localhost:3000/postulation/${this.jobId}`, {});
+        if (responseAxios.status == 200) {
+          this.postulado = responseAxios.data.postulado;
+          this.guardado = responseAxios.data.guardado;
+          return responseAxios.data;
+        } else {
+          console.log("algo salió mal");
+        }
+      },
+
+      async getInformation() {
+        let responseAxios = await callApiAxios("get", `http://localhost:3000/postulation/information/${this.jobId}`, {});
+        if (responseAxios.status == 200) {
+          console.log(responseAxios.data)
+          return responseAxios.data;
+        } else {
+          console.log("algo salió mal");
+        }
+      },
+
+      showViewModal() {
+        const job=this.jobs[0]; 
+      Swal.fire({
+        width: '800px',
+        title: 'Ver Detalle ',
+        html: `
+        <table class="job-table" style="margin: auto;">
+        <tr><td style="text-align: right;"><b>Nombre:</b></td><td style="text-align: left;"> ${job.nombre} ${job.apellido}</td></tr>
+        <tr><td style="text-align: right;"><b>Telefono:</b></td><td style="text-align: left;"> ${job.telefono}</td></tr>
+        <tr><td style="text-align: right;"><b>Región:</b></td><td style="text-align: left;"> ${job.region}</td></tr>
+        <tr><td style="text-align: right;"><b>Comuna:</b></td><td style="text-align: left;"> ${job.comuna}</td></tr>
+        <tr><td style="text-align: right;"><b>Profesion:</b></td><td style="text-align: left;"> ${job.profesion}</td></tr>
+        <tr><td style="text-align: right;"><b>Institucion:</b></td><td style="text-align: left;"> ${job.institucion}</td></tr>
+        <tr><td style="text-align: right;"><b>Titulo:</b></td><td style="text-align: left;"> ${job.titulo}</td></tr>
+        <tr><td style="text-align: right;"><b>Aptitudes:</b></td><td style="text-align: left;"> ${job.texto_habilidades}</td></tr>
+      </table>
+        `,
+      })
+    },
+
       showSendMailModal(job) {
         Swal.fire({
             title: 'Enviar Correo',
@@ -75,76 +124,20 @@
             }
           });
       },
-      async showEditModal(job) {
-        const { value: formValues } = await Swal.fire({
-          title: 'Editar Trabajo',
-          html:
-        '<label for="swal-input1">Nombre:</label>' +
-        '<input id="swal-input1" class="swal2-input" value="' + job.nombre + '">' +
-        
-        '<label for="swal-input2">Región:</label>' +
-        '<input id="swal-input2" class="swal2-input" value="' + job.region + '">' +
-        
-        '<label for="swal-input3">Comuna:</label>' +
-        '<input id="swal-input3" class="swal2-input" value="' + job.comuna + '">' +
-        
-        '<label for="swal-input4">Cargo:</label>' +
-        '<input id="swal-input4" class="swal2-input" value="' + job.cargo + '">' +
-        
-        '<label for="swal-input5">Contrato:</label>' +
-        '<input id="swal-input5" class="swal2-input" value="' + job.contrato + '">' +
-        
-        '<label for="swal-input6">Jornada:</label>' +
-        '<input id="swal-input6" class="swal2-input" value="' + job.jornada + '">' +
-        
-        '<label for="swal-input7">Modalidad:</label>' +
-        '<input id="swal-input7" class="swal2-input" value="' + job.modalidad + '">' +
-        
-        '<label for="swal-input8">Aptitudes:</label>' +
-        '<input id="swal-input8" class="swal2-input" value="' + job.aptitudes + '">',
-      focusConfirm: false,
-      showCancelButton: true,
-      confirmButtonText: 'Actualizar',
-      cancelButtonText: 'Cancelar',
-      preConfirm: () => {
-        return [
-          document.getElementById('swal-input1').value,
-          document.getElementById('swal-input2').value,
-          document.getElementById('swal-input3').value,
-          document.getElementById('swal-input4').value,
-          document.getElementById('swal-input5').value,
-          document.getElementById('swal-input6').value,
-          document.getElementById('swal-input7').value,
-          document.getElementById('swal-input8').value,
-        ]
-      }
-    })
-    if (formValues) {
-      job.nombre = formValues[0]
-      job.region = formValues[1]
-      job.comuna = formValues[2]
-      job.cargo = formValues[3]
-      job.contrato = formValues[4]
-      job.jornada = formValues[5]
-      job.modalidad = formValues[6]
-      job.aptitudes = formValues[7]
-      let responseAxios = await callApiAxios("put", `http://localhost:3000/jobs/update`, job);
-        if (responseAxios.status == 200) {
-          Swal.fire('Actualizado', 'El trabajo ha sido actualizado.', 'success');
-        } else {
-          Swal.fire('Error', 'Hubo un problema al actualizar el trabajo.', 'error');
-        }
-        }
+
+      showPdfModal() {
+      Swal.fire({  
+      title: 'PDF',
+      html: `<embed src="${pdfFile}" type="application/pdf" width="100%" height="500px" />`,
+      width: '80%',
+      showCloseButton: true,
+      showConfirmButton: false,
+      customClass: {
+        content: 'pdf-modal-content',
       },
-      async fetchData(id) {
-        let responseAxios = await callApiAxios("get", `http://localhost:3000/jobs/company/${id}`, {});
-  
-        if (responseAxios.status == 200) {
-          return responseAxios.data;
-        } else {
-          console.log("algo salió mal");
-        }
-      },
+          });
+        },
+
     }
   };
   </script>
@@ -154,3 +147,11 @@
     color: black;
   }
   </style>
+
+<style>
+.job-table td {
+  padding-left: 20px; 
+  padding-bottom: 24px;
+}
+
+</style>
