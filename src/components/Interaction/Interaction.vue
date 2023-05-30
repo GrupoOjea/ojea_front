@@ -25,9 +25,12 @@
               <button class="btn btn-link icon-button" @click="showViewModal()">
                 <i class="fa-regular fa-file"></i>
               </button>
-              <!--button class="btn btn-link icon-button ml-2" @click="showSendMailModal(job)">
+              <button class="btn btn-link icon-button" @click="showPdfModal()">
+                <i class="fa-regular fa-file-pdf"></i>
+              </button>
+              <button class="btn btn-link icon-button ml-2" @click="showSendMailModal(job)">
                 <i class="fa-regular fa-envelope"></i>
-              </button-->              
+              </button>              
             </div>
           </div>
         </li>
@@ -89,7 +92,6 @@
         title: 'Ver Detalle ',
         html: `
         <table class="job-table" style="margin: auto;">
-        <tr><td style="text-align: right;"><b>Nombre:</b></td><td style="text-align: left;"> ${job.nombre} ${job.apellido}</td></tr>
         <tr><td style="text-align: right;"><b>Telefono:</b></td><td style="text-align: left;"> ${job.telefono}</td></tr>
         <tr><td style="text-align: right;"><b>Región:</b></td><td style="text-align: left;"> ${job.region}</td></tr>
         <tr><td style="text-align: right;"><b>Comuna:</b></td><td style="text-align: left;"> ${job.comuna}</td></tr>
@@ -117,8 +119,6 @@
             cancelButtonText: 'Cancelar'
           }).then((result) => {
             if (result.isConfirmed) {
-              // Aquí puedes manejar lo que sucede cuando se hace clic en el botón "Enviar".
-              // Por ejemplo, puedes enviar el correo.
               let mensaje = result.value;
               console.log(mensaje);
             }

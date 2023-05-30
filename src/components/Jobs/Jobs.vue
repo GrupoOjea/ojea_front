@@ -208,9 +208,9 @@ export default {
 .icon-button:hover::before {
   content: attr(title);
   position: absolute;
-  top: -30px; /* Ajusta la posición vertical del título */
-  left: 50%; /* Ajusta la posición horizontal del título */
-  transform: translateX(-50%); /* Centra horizontalmente el título */
+  top: -30px;
+  right: 2%;
+  transform: translateX(-50%);
   padding: 5px;
   background-color: #000;
   color: #fff;
