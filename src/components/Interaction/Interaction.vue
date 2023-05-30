@@ -1,6 +1,9 @@
 <template>
     <div>
       <NavbarCompany></NavbarCompany>
+      <Loading v-model:active="isLoading"
+                   :can-cancel="true"
+                   :is-full-page="fullPage"></Loading>
     </div>
     <div class="card" style="margin: 15px">
       <div class="card-body">
@@ -43,6 +46,8 @@
   import NavbarCompany from './../Navbar/NavbarCompany.vue';
   import {callApiAxios} from '../../services/axios.ts';
   import pdfFile from '@/assets/pdf/formulario_cv.pdf';
+  import Loading from 'vue-loading-overlay';
+  import 'vue-loading-overlay/dist/css/index.css';
   
   export default {
     data() {
@@ -52,9 +57,11 @@
         jobId: null,
         postulado: null,
         guardado: null,
+        isLoading: false,
       };
     },
     components: {
+      Loading,
       NavbarCompany
     },
     async mounted() {
@@ -104,26 +111,39 @@
       })
     },
 
-      showSendMailModal(job) {
-        Swal.fire({
-            title: 'Enviar Correo',
-            input: 'textarea',
-            inputPlaceholder: 'Escribe tu mensaje aquí...',
-            inputAttributes: {
-              'aria-label': 'Escribe tu mensaje aquí',
-              'maxlength': 500,
-              'rows': 10
-            },
-            showCancelButton: true,
-            confirmButtonText: 'Enviar',
-            cancelButtonText: 'Cancelar'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              let mensaje = result.value;
-              console.log(mensaje);
-            }
-          });
-      },
+    async showSendMailModal(job) {
+    this.isLoading = true;
+    
+    let datos = {
+        "email": "emerzon.melo@inacapmail.cl",
+        "body_email": "hola",
+        "email_empresa": "atech@gmail.com",
+        "nombre_empresa": "Atech",
+        "cargo": "Programador junior"
+    }
+    
+    try {
+        let respuestaAxios = await callApiAxios("post", `http://localhost:3000/postulation/send`, datos);
+        
+        if (respuestaAxios.status === 201) {           
+            Swal.fire(
+                '¡Éxito!',
+                'Correo enviado correctamente',
+                'success'
+            )
+        }
+    } catch (error) {
+        console.log('Hubo un error al enviar el correo', error);
+        Swal.fire(
+            'Error',
+            'Hubo un error al enviar el correo',
+            'error'
+        )
+    } finally {
+        this.isLoading = false;
+    }
+},
+
 
       showPdfModal() {
       Swal.fire({  
