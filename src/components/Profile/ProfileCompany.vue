@@ -68,7 +68,7 @@ import NavbarCompany from './../Navbar/NavbarCompany.vue';
     data() {
       return {
         dataCompany: {},
-        isLoading: false,
+        
         fullPage: true,
         editing: {
           info: false,
