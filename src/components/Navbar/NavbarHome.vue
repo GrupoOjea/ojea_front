@@ -15,16 +15,16 @@
         <ul class="nav navbar-nav pull-xs-right">
           <li class="nav-item">
             <router-link
+              :class="{ active: isActiveRoute('/register') }"
+              to="/register" class="nav-link">Crear cuenta
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link
               :class="{ active: isActiveRoute('/login') }"
               to="/login" class="nav-link">Iniciar sesión
             </router-link>
           </li>
-          <!--li class="nav-item">
-            <router-link
-              :class="{ active: isActiveRoute('/register') }"
-              to="/register" class="nav-link">Registrarse
-            </router-link>
-          </li-->
         </ul>
       </div>
     </div>
