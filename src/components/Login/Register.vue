@@ -49,35 +49,41 @@ export default {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
     },
     async createAccount(emailCreate, passCreate, confirmPassword) {
-      if (passCreate !== confirmPassword) {
-        Swal.fire({
-          title: 'Error',
-          text: 'Las contraseñas no coinciden',
-          icon: 'error'
-        });
-        return;
-      }
-      let responseAxios = await callApiAxios('post','http://localhost:3000/login/create',{
-          'tipo_perfil':1,
-          'email':emailCreate,
-          'clave':passCreate,
-        });
+  if (passCreate !== confirmPassword) {
+    Swal.fire({
+      title: 'Error',
+      text: 'Las contraseñas no coinciden',
+      icon: 'error'
+    });
+    return;
+  }
+  let responseAxios = await callApiAxios('post','http://localhost:3000/login/create',{
+      'tipo_perfil':1,
+      'email':emailCreate,
+      'clave':passCreate,
+    });
 
-        if(responseAxios.status == '202'){
-          Swal.fire({
-            title: 'Error',
-            text: 'Usuario ya existe',
-            icon: 'error'
-          })
-        }
-        if(responseAxios.status == '201'){
-          Swal.fire({
-            title: 'Éxito',
-            text: 'Usuario insertado',
-            icon: 'success'
-          })
-        }
-    },
+  if(responseAxios.status == '202'){
+    Swal.fire({
+      title: 'Error',
+      text: 'Usuario ya existe',
+      icon: 'error'
+    })
+  }
+  if(responseAxios.status == '201'){
+    Swal.fire({
+      title: 'Éxito',
+      text: 'Usuario insertado',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Navegar a la ruta 'register-user' con el ID retornado en la respuesta
+        this.$router.push(`/register-user/${responseAxios.data.id}`);
+      }
+    })
+  }
+},
     submitForm() {
       this.createAccount(this.emailCreate, this.passCreate, this.passCreateConfirm);
     }
