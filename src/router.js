@@ -10,7 +10,8 @@ import ProfileCompany from './components/Profile/ProfileCompany.vue'
 import FormJob from './components/Form/FormJob.vue'
 import Jobs from './components/Jobs/Jobs.vue'
 import Interaction from './components/Interaction/Interaction.vue'
-import RegisterPeople from './components/Login/RegisterPeople.vue' 
+import RegisterUser from './components/Login/RegisterUser.vue' 
+import SearchUser from './components/Search/SearchUser.vue'
 const routes = [
   {
     path: '/',
@@ -70,7 +71,12 @@ const routes = [
   {
     path: '/register-user/:id',
     name: 'register-user',
-    component: RegisterPeople
+    component: RegisterUser
+  },
+  {
+    path: '/search-user',
+    name: 'search-user',
+    component: SearchUser
   }
  
  
