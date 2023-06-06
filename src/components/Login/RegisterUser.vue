@@ -18,7 +18,8 @@
             <div class="input-group-prepend">
               <span class="input-group-text" id="phonePrefix">+56</span>
             </div>
-            <input type="tel" class="form-control" id="phoneInput" v-model="phone" aria-describedby="phonePrefix" @input="validatePhoneInput" />
+            <input type="tel" class="form-control" id="phoneInput" v-model="phone" aria-describedby="phonePrefix"
+              @input="validatePhoneInput" />
           </div>
         </div>
 
@@ -34,7 +35,8 @@
 
         <div class="col-md-6 mb-3">
           <label for="dobInput" class="form-label">Fecha de Nacimiento</label>
-          <input type="date" class="form-control" id="dobInput" v-model="birthDate" @change="calculateAge" :max="minBirthDate" />
+          <input type="date" class="form-control" id="dobInput" v-model="birthDate" @change="calculateAge"
+            :max="minBirthDate" />
         </div>
 
         <div class="col-md-6 mb-3">
@@ -46,7 +48,8 @@
           <label for="regionInput" class="form-label">Región</label>
           <select class="form-control" id="regionInput" v-model="region" @change="updateComunas">
             <option disabled value="">Selecciona una región</option>
-            <option v-for="regionData in regiones" :key="regionData.region" :value="regionData.region">{{regionData.region}}</option>
+            <option v-for="regionData in regiones" :key="regionData.region" :value="regionData.region">
+              {{ regionData.region }}</option>
           </select>
         </div>
 
@@ -54,7 +57,7 @@
           <label for="comunaInput" class="form-label">Comuna</label>
           <select class="form-control" id="comunaInput" v-model="comuna">
             <option disabled value="">Selecciona una comuna</option>
-            <option v-for="comuna in comunas" :key="comuna" :value="comuna">{{comuna}}</option>
+            <option v-for="comuna in comunas" :key="comuna" :value="comuna">{{ comuna }}</option>
           </select>
         </div>
       </div>
@@ -68,7 +71,8 @@
 <script>
 import regionesData from "@/utils/region_comuna.json"
 import carrerasData from "@/utils/carreras.json";
-import {callApiAxios} from '../../services/axios.ts';
+import { callApiAxios } from '../../services/axios.ts';
+import Swal from 'sweetalert2';
 
 export default {
   data() {
@@ -91,48 +95,55 @@ export default {
       const regionData = this.regiones.find(regionData => regionData.region === this.region);
       this.comunas = regionData ? regionData.comunas : [];
     },
-    submitForm() {
+    async submitForm() {
       const id = localStorage.getItem('id');
-      console.log({
-        name: this.name,
-        surname: this.surname,
-        phone:'+56' + this.phone,
-        age: this.age,
-        profession: this.profession,
-        region: this.region,
-        comuna: this.comuna,
-        fk_login: parseInt(id),
-      });
-      let responseAxios = callApiAxios('post','http://localhost:3000/profile/create',{
-      'nombre':this.name,
-      'apellido':this.surname,
-      'edad': this.age,
-      'profesion': this.profession,
-      'telefono':'+56' + this.phone,
-      'region': this.region,
-      'comuna': this.comuna,
-      'fk_login': parseInt(id),
-    });
+      try {
+        let responseAxios = await callApiAxios('post', 'http://localhost:3000/profile/create', {
+          'nombre': this.name,
+          'apellido': this.surname,
+          'edad': this.age,
+          'profesion': this.profession,
+          'telefono': '+56' + this.phone,
+          'region': this.region,
+          'comuna': this.comuna,
+          'fk_login': parseInt(id),
+        });
+
+        if (responseAxios.status == 201) {
+          localStorage.setItem('nombre', this.name + ' ' + this.surname);
+          Swal.fire({
+            icon: 'success',
+            title: '¡Buen trabajo!',
+            text: 'Datos creados correctamente.',
+          }).then((result) => {
+            if (result.value) {
+              this.$router.push('/search-user');
+            }
+          });
+        }
+      } catch (error) {
+        console.log('Error en la llamada a la API:', error);
+      }
     },
     validatePhoneInput() {
-    if (this.phone.length > 9) {
-      this.phone = this.phone.slice(0, 9);
-    }
-    if (/[^0-9]/.test(this.phone)) {
-      this.phone = this.phone.replace(/[^0-9]/g, "");
-    }
-  },
+      if (this.phone.length > 9) {
+        this.phone = this.phone.slice(0, 9);
+      }
+      if (/[^0-9]/.test(this.phone)) {
+        this.phone = this.phone.replace(/[^0-9]/g, "");
+      }
+    },
     calculateAge() {
-      let today = { 
-        day: new Date().getDate(), 
-        month: new Date().getMonth() + 1, 
-        year: new Date().getFullYear() 
+      let today = {
+        day: new Date().getDate(),
+        month: new Date().getMonth() + 1,
+        year: new Date().getFullYear()
       };
-      
-      let birthDate = { 
-        day: new Date(this.birthDate).getDate(), 
-        month: new Date(this.birthDate).getMonth() + 1, 
-        year: new Date(this.birthDate).getFullYear() 
+
+      let birthDate = {
+        day: new Date(this.birthDate).getDate(),
+        month: new Date(this.birthDate).getMonth() + 1,
+        year: new Date(this.birthDate).getFullYear()
       };
 
       if (today.month < birthDate.month || (today.month == birthDate.month && today.day < birthDate.day)) {
@@ -144,11 +155,11 @@ export default {
   },
   computed: {
     minBirthDate() {
-        let date = new Date();
-        date.setFullYear(date.getFullYear() - 18);
-        return date.toISOString().split("T")[0];
+      let date = new Date();
+      date.setFullYear(date.getFullYear() - 18);
+      return date.toISOString().split("T")[0];
     },
-}
+  }
 }
 </script>
 
@@ -176,5 +187,4 @@ export default {
 
 .input-group-prepend {
   margin-right: -1px;
-}
-</style>
+}</style>
