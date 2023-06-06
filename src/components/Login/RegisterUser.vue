@@ -68,6 +68,7 @@
 <script>
 import regionesData from "@/utils/region_comuna.json"
 import carrerasData from "@/utils/carreras.json";
+import {callApiAxios} from '../../services/axios.ts';
 
 export default {
   data() {
@@ -91,22 +92,32 @@ export default {
       this.comunas = regionData ? regionData.comunas : [];
     },
     submitForm() {
+      const id = localStorage.getItem('id');
       console.log({
         name: this.name,
         surname: this.surname,
-        phone:'+569' + this.phone,
+        phone:'+56' + this.phone,
         age: this.age,
         profession: this.profession,
         region: this.region,
         comuna: this.comuna,
+        fk_login: parseInt(id),
       });
+      let responseAxios = callApiAxios('post','http://localhost:3000/profile/create',{
+      'nombre':this.name,
+      'apellido':this.surname,
+      'edad': this.age,
+      'profesion': this.profession,
+      'telefono':'+56' + this.phone,
+      'region': this.region,
+      'comuna': this.comuna,
+      'fk_login': parseInt(id),
+    });
     },
     validatePhoneInput() {
-    // Verificar si el valor del teléfono tiene más de 8 caracteres
     if (this.phone.length > 9) {
       this.phone = this.phone.slice(0, 9);
     }
-    // Verificar si el valor del teléfono contiene algo que no sea un número
     if (/[^0-9]/.test(this.phone)) {
       this.phone = this.phone.replace(/[^0-9]/g, "");
     }

@@ -22,13 +22,13 @@
               <li>
                 <router-link
                   :class="{ active: isActiveRoute('/profile-user') }"
-                  to="/profile-company" class="dropdown-item">Mi perfil
+                  to="/profile-user" class="dropdown-item">Mi perfil
                 </router-link>
               </li>
               <li>
                 <router-link
-                  :class="{ active: isActiveRoute('/jobs') }"
-                  to="/jobs" class="dropdown-item">Mis Empleos
+                  :class="{ active: isActiveRoute('/my-jobs') }"
+                  to="/my-jobs" class="dropdown-item">Mis Empleos
                 </router-link>
               </li>
               <li><hr class="dropdown-divider" /></li>

@@ -109,7 +109,7 @@ export default {
               if (getPersonInformation && getPersonInformation.data && Object.keys(getPersonInformation.data).length > 0) {
                 console.log(getPersonInformation.data)
                 // Si el usuario tiene una persona asociada
-                this.$router.push('/ruta-para-tipo-perfil-uno');
+                this.$router.push('/search-user');
               } else {
                 // Si el usuario no tiene una persona asociada
                 this.$router.push(`/register-user/${responseAxios.data.id}`);
@@ -149,6 +149,7 @@ export default {
           });
           return;
         } else {
+          this.$router.push('/search-user');
           localStorage.setItem('estado', estado);
           localStorage.setItem('estatus_registro', estatus_registro);
           localStorage.setItem('tipo_perfil', tipo_perfil);
