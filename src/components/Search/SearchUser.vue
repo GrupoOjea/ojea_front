@@ -102,19 +102,18 @@ export default {
     showDetails(item) {
       Swal.fire({
         width: '1400px',
-        heightAuto: false, // Agrega esta línea
-        title: item.cargo,
+        heightAuto: false,
         html: `
-      <div>
+      <div class="data-box">
+        <h2>${item.cargo}</h2>
         <p>${item.nombre}. ${item.comuna}, ${item.region}, Chile (${item.modalidad})</p>
-        <div class="data-box">  <!-- Envuelve los datos con este div -->
-          <p>Jornada: ${item.jornada} - ${item.experiencia}</p>
-          <p>Aptitudes: ${item.aptitudes}</p>
-        </div>
-        <div style="margin-top: 20px;" class="data-box"> <!-- Y este -->
-          <h3>Descripción:</h3>
-          <p>${item.descripcion}</p>
-        </div>
+        <br>
+        <p><i class="fa-solid fa-suitcase"></i> Jornada: ${item.jornada} - ${item.experiencia}</p>
+        <p><i class="fa-solid fa-square-check"></i> Aptitudes: ${item.aptitudes}</p>
+      </div>
+      <div style="margin-top: 20px;" class="data-box">
+        <h3>Descripción:</h3>
+        <p>${item.descripcion}</p>
       </div>
     `,
         confirmButtonText: 'Guardar',
@@ -122,6 +121,8 @@ export default {
         cancelButtonText: 'Solicitar',
       })
     },
+
+
 
 
 
@@ -166,7 +167,9 @@ export default {
   text-align: right;
 }
 
-.swal2-row *, .swal2-row *:before, .swal2-row *:after {
+.swal2-row *,
+.swal2-row *:before,
+.swal2-row *:after {
   box-sizing: border-box;
 }
 
