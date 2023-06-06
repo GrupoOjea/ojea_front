@@ -76,8 +76,7 @@ export default {
 
     async login(email, pass) {
       this.isLoading = true;
-
-      // Comprueba si los campos de entrada están vacíos
+      
       if (!email || !pass) {
         Swal.fire({
           icon: 'error',
@@ -97,7 +96,6 @@ export default {
         let { token, estado, estatus_registro, tipo_perfil, nombre, id } = responseAxios.data
 
         if (estado == 0) {
-          // Guardar datos en localstorage
           localStorage.setItem('id', id);
           localStorage.setItem('estado', estado);
           localStorage.setItem('tipo', tipo_perfil);
@@ -108,10 +106,8 @@ export default {
               console.log(getPersonInformation)
               if (getPersonInformation && getPersonInformation.data && Object.keys(getPersonInformation.data).length > 0) {
                 console.log(getPersonInformation.data)
-                // Si el usuario tiene una persona asociada
                 this.$router.push('/search-user');
               } else {
-                // Si el usuario no tiene una persona asociada
                 this.$router.push(`/register-user/${responseAxios.data.id}`);
               }
             } catch (error) {
@@ -133,7 +129,6 @@ export default {
               console.log('Error en la llamada a la API:', error);
             }
           } else {
-            // Usuario no es de tipo 1 o 2, mostrar modal
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
@@ -141,7 +136,6 @@ export default {
             });
           }
         } else if (!token) {
-          // La contraseña no es válida o el usuario no fue encontrado
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
@@ -161,11 +155,9 @@ export default {
     },
 
     setLocalStorage() {
-      // Establece un objeto en el almacenamiento local
       const data = { name: 'ejemplo', age: 30 };
       localStorage.setItem('data', JSON.stringify(data));
 
-      // Espera 1 hora antes de borrar el objeto del almacenamiento local
       setTimeout(() => {
         localStorage.removeItem('data');
         localStorage.clear();

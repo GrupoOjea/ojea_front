@@ -71,6 +71,8 @@ export default {
     })
   }
   if(responseAxios.status == '201'){
+    localStorage.setItem('id', responseAxios.data.id);
+    
     Swal.fire({
       title: 'Éxito',
       text: 'Usuario insertado',
@@ -78,7 +80,6 @@ export default {
       confirmButtonText: 'OK'
     }).then((result) => {
       if (result.isConfirmed) {
-        // Navegar a la ruta 'register-user' con el ID retornado en la respuesta
         this.$router.push(`/register-user/${responseAxios.data.id}`);
       }
     })
