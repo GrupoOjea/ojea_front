@@ -59,7 +59,7 @@ export default {
   }
   let responseAxios = await callApiAxios('post','http://localhost:3000/login/create',{
       'tipo_perfil':1,
-      'email':emailCreate,
+      'email':emailCreate.toLowerCase(),
       'clave':passCreate,
     });
 

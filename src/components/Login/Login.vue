@@ -143,6 +143,7 @@ export default {
           });
           return;
         } else {
+          localStorage.setItem('id', id);
           this.$router.push('/search-user');
           localStorage.setItem('estado', estado);
           localStorage.setItem('estatus_registro', estatus_registro);

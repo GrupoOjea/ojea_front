@@ -1,0 +1,46 @@
+  [
+    {
+        "institucion": "Universidad de Chile",
+        "carreras": [
+            "Medicina",
+            "Derecho",
+            "Ingeniería Civil",
+            "Psicología"
+        ]
+    },
+    {
+        "institucion": "Universidad Católica de Chile",
+        "carreras": [
+            "Economía",
+            "Arquitectura",
+            "Ingeniería Comercial",
+            "Pedagogía"
+        ]
+    },
+    {
+        "institucion": "Universidad de Santiago de Chile",
+        "carreras": [
+            "Ciencias Físicas y Matemáticas",
+            "Geología",
+            "Química y Farmacia",
+            "Ingeniería Eléctrica"
+        ]
+    },
+    {
+        "institucion": "Universidad de Concepción",
+        "carreras": [
+            "Ingeniería Civil",
+            "Enfermería",
+            "Agronomía",
+            "Medicina"
+        ]
+    }
+    ,
+    {
+        "institucion": "INACAP",
+        "carreras": [
+            "Ingeniería en Informática",
+            "Analista Programador"
+        ]
+    }
+]
