@@ -36,14 +36,15 @@
             <div class="row">
                 <div class="col-sm-12 mb-3">
                     <div class="card h-100">
-                        <i class="fa-solid fa-pen-to-square icon-pen" @click="editEducation"></i>
+                        <i class="fa-solid fa-pen-to-square icon-pen" @click="editEducationn"></i>
                         <i class="fa-solid fa-plus icon-plus" @click="addEducation"></i>
                         <div class="card-body">
                             <h4>Educación</h4>
                             <br><br>
-                            <p>{{ userProfile.institucion }}</p>
+                            <p style="font-weight: bold">{{ userProfile.institucion }}</p>
                             <p>{{ userProfile.titulo }}</p>
-                            <p>{{ userProfile.mes_inicio }} - {{ userProfile.mes_fin }}</p>
+                            <p>{{ `${userProfile.mes_inicio} ${userProfile.ano_inicio} - ${userProfile.mes_fin}
+                                                            ${userProfile.ano_fin}` }}</p>
                         </div>
                     </div>
                 </div>
@@ -81,18 +82,16 @@ import institucionData from "@/utils/institucion.json";
 export default {
     components: {
         NavbarUser
-
     },
     data() {
         return {
             navPerfil: true,
             userProfile: {},
             habilidadesData: habilidadesData,
-            institucionData: []
+            institucionData: institucionData,
         };
     },
     async mounted() {
-
         const id = localStorage.getItem('id');
         try {
             const response = await callApiAxios('get', `http://localhost:3000/profile/${id}`, {});
@@ -206,31 +205,14 @@ export default {
             });
         },
 
-        generateOptions(data, valueField, textField) {
-            return data.map(item => `<option value="${item[valueField]}">${item[textField]}</option>`).join('');
-        },
-        
         addEducation() {
-            console.log(this.institucionData); 
-  
-  // Aquí estás buscando una institución específica.
-  let selectedInstitucion = this.institucionData.find(institucion => institucion.institucion === 'Universidad de Chile');
-
-  // Genera las opciones para las instituciones.
-  let institucionOptions = this.generateOptions(this.institucionData, 'institucion', 'institucion');
-  
-  if (selectedInstitucion) {
-    const carreraOptions = this.generateOptions(selectedInstitucion.carreras, 'nombre', 'nombre');
-    
-    Swal.fire({
-      // Resto del código...
-    }).then(result => {
-      // Resto del código...
-    });
-  } else {
-    console.error('No se encontró la institución "Universidad de Chile" en la data de instituciones.');
-  }
-            
+            let institucionOptions = this.institucionData.map(institucion => `<option value="${institucion.institucion}">${institucion.institucion}</option>`).join('');
+            let date = new Date();
+            let currentYear = date.getFullYear();
+            let months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            let monthOptions = `<option value="">Seleccione Mes</option>` + Array.from({ length: 12 }, (_, i) => `<option value="${months[i]}">${months[i]}</option>`).join('');
+            let yearOptionsInicio = `<option value="">Seleccione Año</option>` + Array.from({ length: currentYear - 1950 + 1 }, (_, i) => `<option value="${1950 + i}">${1950 + i}</option>`).join('');
+            let yearOptionsFin = `<option value="">Seleccione Año</option>` + Array.from({ length: 2050 - 1950 + 1 }, (_, i) => `<option value="${1950 + i}">${1950 + i}</option>`).join('');
 
 
 
@@ -238,67 +220,177 @@ export default {
                 width: '800px',
                 title: 'Agregar Educación',
                 html: `
-                    <div class="swal2-content">
-                        <div class="swal2-row">
-                            <label class="swal2-label">Institución:</label>
-                            <select id="newInstitucion" class="swal2-input">${institucionOptions}</select>
-                        </div>
-                        <div class="swal2-row">
-                            <label class="swal2-label">Carrera:</label>
-                            <select id="newCarrera" class="swal2-input"></select>
-                        </div>
-                        <div class="swal2-row">
-                            <label class="swal2-label">Mes de Inicio:</label>
-                            <input type="text" id="newMesInicio" class="swal2-input" placeholder="Ingrese el mes de inicio">
-                        </div>
-                        <div class="swal2-row">
-                            <label class="swal2-label">Año de Inicio:</label>
-                            <input type="text" id="newAnoInicio" class="swal2-input" placeholder="Ingrese el año de inicio">
-                        </div>
-                        <div class="swal2-row">
-                            <label class="swal2-label">Mes de Fin:</label>
-                            <input type="text" id="newMesFin" class="swal2-input" placeholder="Ingrese el mes de fin">
-                        </div>
-                        <div class="swal2-row">
-                            <label class="swal2-label">Año de Fin:</label>
-                            <input type="text" id="newAnoFin" class="swal2-input" placeholder="Ingrese el año de fin">
-                        </div>
-                    </div>`,
+        <div class="swal2-content">
+            <div class="swal2-row">
+                <label class="swal2-label">Institución:</label>
+                <select id="newInstitucion" class="swal2-input">${institucionOptions}</select>
+            </div>
+            <div class="swal2-row">
+                <label class="swal2-label">Carrera:</label>
+                <select id="newCarrera" class="swal2-input"></select>
+            </div>
+            <div class="swal2-row">
+        <label class="swal2-label">Mes de Inicio:</label>
+        <select id="newMesInicio" class="swal2-input">${monthOptions}</select>
+            </div>
+            <div class="swal2-row">
+                <label class="swal2-label">Año de Inicio:</label>
+                <select id="newAnoInicio" class="swal2-input">${yearOptionsInicio}</select>
+            </div>
+            <div class="swal2-row">
+                <label class="swal2-label">Mes de Fin:</label>
+                <select id="newMesFin" class="swal2-input">${monthOptions}</select>
+            </div>
+            <div class="swal2-row">
+                <label class="swal2-label">Año de Fin:</label>
+                <select id="newAnoFin" class="swal2-input">${yearOptionsFin}</select>
+            </div>
+        </div>`,
                 focusConfirm: false,
                 didOpen: () => {
-                    // Cuando se abre la alerta, configura el listener para el cambio de institución
-                    document.getElementById('newInstitucion').addEventListener('change', function () {
-                        // Encuentra la institución seleccionada
-                        const selectedInstitucion = this.institucionData.find(institucion => institucion.institucion === this.value);
-
-                        // Genera las opciones para las carreras de esta institución
-                        const carreraOptions = this.generateOptions(selectedInstitucion.carreras, 'nombre', 'nombre');
-
-                        // Actualiza el select de carreras con las nuevas opciones
-                        document.getElementById('newCarrera').innerHTML = carreraOptions;
-                    }.bind(this)); // Bind "this" to have access to the vue instance in the event listener
-
-                    // Carga las carreras de la primera institución por defecto
                     if (this.institucionData.length > 0) {
-                        const carreraOptions = this.generateOptions(this.institucionData[0].carreras, 'nombre', 'nombre');
+                        let carreraOptions = this.institucionData[0].carreras.map(carrera => `<option value="${carrera}">${carrera}</option>`).join('');
                         document.getElementById('newCarrera').innerHTML = carreraOptions;
                     }
+
+                    document.getElementById('newInstitucion').addEventListener('change', (event) => {
+                        let selectedInstitucion = this.institucionData.find(institucion => institucion.institucion === event.target.value);
+
+                        let carreraOptions = selectedInstitucion.carreras.map(carrera => `<option value="${carrera}">${carrera}</option>`).join('');
+
+                        document.getElementById('newCarrera').innerHTML = carreraOptions;
+                    });
                 },
                 preConfirm: () => {
                     return {
                         institucion: document.getElementById('newInstitucion').value,
-                        carrera: document.getElementById('newCarrera').value,
+                        titulo: document.getElementById('newCarrera').value,
                         mes_inicio: document.getElementById('newMesInicio').value,
-                        ano_inicio: document.getElementById('newAnoInicio').value,
+                        ano_inicio: parseInt(document.getElementById('newAnoInicio').value),
                         mes_fin: document.getElementById('newMesFin').value,
-                        ano_fin: document.getElementById('newAnoFin').value
+                        ano_fin: parseInt(document.getElementById('newAnoFin').value),
+                        'fk_persona': this.userProfile.id
                     }
                 }
-            }).then(result => {
+            }).then(async result => {
                 if (result.isConfirmed) {
-                    // Aquí puedes realizar la acción para guardar la nueva educación
-                    // const nuevaEducacion = result.value;
-                    // Realizar acciones necesarias con la nueva educación
+                    console.log(result)
+                    let responseAxios = await callApiAxios('post', `http://localhost:3000/education/create`, result.value);
+                    if (responseAxios.status === 201) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Operación exitosa!',
+                            text: 'Los datos se han enviado correctamente.'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '¡Algo salió mal!',
+                            text: 'Por favor, valida los datos e intenta nuevamente.'
+                        });
+                    }
+                }
+            });
+        },
+
+        editEducation(education) {
+            let date = new Date();
+            let currentYear = date.getFullYear();
+            let months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+            let institucionOptions = this.institucionData.map(institucion => {
+                const selected = education.institucion === institucion.institucion ? 'selected' : '';
+                return `<option value="${institucion.institucion}" ${selected}>${institucion.institucion}</option>`;
+            }).join('');
+
+            let selectedInstitucion = this.institucionData.find(institucion => institucion.institucion === education.institucion);
+            let carreraOptions = '';
+            if (selectedInstitucion) {
+                carreraOptions = selectedInstitucion.carreras.map(carrera => {
+                    const selected = education.carrera === carrera ? 'selected' : '';
+                    return `<option value="${carrera}" ${selected}>${carrera}</option>`;
+                }).join('');
+            }
+
+            let monthOptions = months.map(month => {
+                const selected = education.mes_inicio === month ? 'selected' : '';
+                return `<option value="${month}" ${selected}>${month}</option>`;
+            }).join('');
+
+            let yearOptions = Array.from({ length: 2050 - currentYear + 1 }, (_, i) => {
+                const year = currentYear + i;
+                const selected = education.ano_inicio === year ? 'selected' : '';
+                return `<option value="${year}" ${selected}>${year}</option>`;
+            }).join('');
+
+            Swal.fire({
+                width: '800px',
+                title: 'Editar Educación',
+                html: `
+        <div class="swal2-content">
+            <div class="swal2-row">
+                <label class="swal2-label">Institución:</label>
+                <select id="editInstitucion" class="swal2-input">${institucionOptions}</select>
+            </div>
+            <div class="swal2-row">
+                <label class="swal2-label">Carrera:</label>
+                <select id="editCarrera" class="swal2-input">${carreraOptions}</select>
+            </div>
+            <div class="swal2-row">
+                <label class="swal2-label">Mes de Inicio:</label>
+                <select id="editMesInicio" class="swal2-input">${monthOptions}</select>
+            </div>
+            <div class="swal2-row">
+                <label class="swal2-label">Año de Inicio:</label>
+                <select id="editAnoInicio" class="swal2-input">${yearOptions}</select>
+            </div>
+            <div class="swal2-row">
+                <label class="swal2-label">Mes de Fin:</label>
+                <select id="editMesFin" class="swal2-input">${monthOptions}</select>
+            </div>
+            <div class="swal2-row">
+                <label class="swal2-label">Año de Fin:</label>
+                <select id="editAnoFin" class="swal2-input">${yearOptions}</select>
+            </div>
+        </div>`,
+                didOpen: () => {
+                    document.getElementById('editInstitucion').addEventListener('change', function () {
+                        const selectedInstitucion = this.institucionData.find(institucion => institucion.institucion === this.value);
+                        const carreraOptions = selectedInstitucion.carreras.map(carrera => {
+                            const selected = education.carrera === carrera ? 'selected' : '';
+                            return `<option value="${carrera}" ${selected}>${carrera}</option>`;
+                        }).join('');
+                        document.getElementById('editCarrera').innerHTML = carreraOptions;
+                    }.bind(this));
+
+                    if (this.institucionData.length > 0) {
+                        const carreraOptions = selectedInstitucion.carreras.map(carrera => {
+                            const selected = education.carrera === carrera ? 'selected' : '';
+                            return `<option value="${carrera}" ${selected}>${carrera}</option>`;
+                        }).join('');
+                        document.getElementById('editCarrera').innerHTML = carreraOptions;
+                    }
+                },
+                preConfirm: () => {
+                    return {
+                        institucion: document.getElementById('editInstitucion').value,
+                        carrera: document.getElementById('editCarrera').value,
+                        mes_inicio: document.getElementById('editMesInicio').value,
+                        ano_inicio: document.getElementById('editAnoInicio').value,
+                        mes_fin: document.getElementById('editMesFin').value,
+                        ano_fin: document.getElementById('editAnoFin').value
+                    };
+                }
+            }).then(async result => {
+                if (result.isConfirmed) {
+                    const updatedEducation = result.value;
+                    // Lógica para guardar los cambios en la base de datos
+                    // ...
+
+                    // Mostrar mensaje de éxito
+                    Swal.fire('Actualizado', 'La educación ha sido actualizada.', 'success');
                 }
             });
         },
@@ -363,9 +455,9 @@ export default {
                 if (result.isConfirmed) {
                     const habilidadPrincipal = result.value.habilidadPrincipal;
                     const subhabilidades = result.value.subhabilidades;
-                    console.log('Habilidades seleccionadas:', subhabilidades);
                     let responseAxios = await callApiAxios('post', `http://localhost:3000/skills/create`, {
                         'texto_habilidades': subhabilidades,
+                        'habilidad_principal': habilidadPrincipal,
                         'fk_persona': this.userProfile.id,
                     });
                     if (responseAxios.status == 201) {
@@ -374,59 +466,70 @@ export default {
                         });
                     } else {
                         Swal.fire('Error', 'Hubo un problema al crear las habilidades.', 'error');
-                    } V
+                    }
                 }
             });
-
-
-
-
         },
 
         editSkills() {
             const habilidadesPrincipales = habilidadesData.habilidades_informatica;
-            const habilidadesExistentes = this.userProfile.habilidades.flatMap(h => h.texto_habilidades.split(',').map(habilidad => habilidad.trim()));
+            Swal.fire({
+                title: 'Selecciona una Habilidad Principal',
+                input: 'select',
+                inputOptions: habilidadesPrincipales.reduce((obj, habilidad) => ({
+                    ...obj,
+                    [habilidad.nombre]: habilidad.nombre
+                }), {}),
+                inputPlaceholder: 'Selecciona una habilidad',
+                showCancelButton: true
+            }).then(result => {
+                if (result.isConfirmed) {
+                    const habilidadPrincipalSeleccionada = habilidadesPrincipales.find(habilidad => habilidad.nombre === result.value);
+                    const habilidadPrincipalEnUsuario = this.userProfile.habilidades.find(habilidad => habilidad.habilidad_principal === habilidadPrincipalSeleccionada.nombre);
 
-            const habilidadesHTML = habilidadesPrincipales.map(habilidadPrincipal => {
-                const subhabilidadesSeleccionadas = habilidadPrincipal.subhabilidades.filter(subhabilidad =>
-                    habilidadesExistentes.includes(subhabilidad)
-                );
+                    console.log('Habilidad principal seleccionada:', habilidadPrincipalSeleccionada);
+                    console.log('ID de la habilidad principal seleccionada:', habilidadPrincipalEnUsuario.id_skill);
 
-                if (subhabilidadesSeleccionadas.length === 0) {
-                    return '';
+                    this.editSubSkills(habilidadPrincipalSeleccionada, habilidadPrincipalEnUsuario.id_skill);
                 }
+            });
+        },
 
-                const subhabilidadesHTML = habilidadPrincipal.subhabilidades.map(subhabilidad => {
-                    const isChecked = habilidadesExistentes.includes(subhabilidad);
-                    return `
-        <input type="checkbox" id="${subhabilidad}" name="subSkills" value="${subhabilidad}" ${isChecked ? 'checked' : ''}>
-        <label for="${subhabilidad}">${subhabilidad}</label>
-      `;
-                }).join('');
+        editSubSkills(habilidadPrincipalSeleccionada, id_skill) {
+            const habilidadesExistentes = this.userProfile.habilidades.flatMap(h => h.texto_habilidades.split(',').map(habilidad => habilidad.trim()));
+            const habilidadPrincipal = habilidadPrincipalSeleccionada;
 
+            const subhabilidadesSeleccionadas = habilidadPrincipal.subhabilidades.filter(subhabilidad =>
+                habilidadesExistentes.includes(subhabilidad)
+            );
+
+            const subhabilidadesHTML = habilidadPrincipal.subhabilidades.map(subhabilidad => {
+                const isChecked = habilidadesExistentes.includes(subhabilidad);
                 return `
-      <div class="swal2-row habilidad-grupo">
-        <div>
-          <h5 class="habilidad-titulo">${habilidadPrincipal.nombre}</h5>
-        </div>
-        <div class="swal2-checkbox-container">
-          ${subhabilidadesHTML}
-        </div>
-      </div>
-    `;
+                    <input type="checkbox" id="${subhabilidad}" name="subSkills" value="${subhabilidad}" ${isChecked ? 'checked' : ''}>
+                    <label for="${subhabilidad}">${subhabilidad}</label>`;
             }).join('');
 
+            const habilidadesHTML = `
+                <div id="subSkillsContainer" class="swal2-row habilidad-grupo">
+                    <div>
+                        <h5 class="habilidad-titulo">${habilidadPrincipal.nombre}</h5>
+                    </div>
+                    <div class="swal2-checkbox-container">
+                        ${subhabilidadesHTML}
+                    </div>
+                </div>
+            `;
             Swal.fire({
                 width: '1100px',
                 title: 'Editar Habilidades',
                 html: `
-      <div class="swal2-content">
-        ${habilidadesHTML}
-      </div>`,
+        <div class="swal2-content">
+            ${habilidadesHTML}
+        </div>`,
                 didOpen: () => {
                     const subSkillsContainer = document.getElementById('subSkillsContainer');
                     const subSkillsCheckboxes = subSkillsContainer.querySelectorAll('input[type="checkbox"]');
-
                     subSkillsCheckboxes.forEach(checkbox => {
                         if (habilidadesExistentes.includes(checkbox.value)) {
                             checkbox.checked = true;
@@ -441,16 +544,16 @@ export default {
                         .map(checkbox => checkbox.value);
 
                     return {
-                        id: this.userProfile.id_skill,
+                        id: id_skill,
                         texto_habilidades: selectedSubSkills.join(", ") || ""
                     };
                 }
             }).then(async result => {
                 if (result.isConfirmed) {
                     const subhabilidades = result.value.texto_habilidades;
-                    console.log('Habilidades seleccionadas:', this.userProfile.id_skill, subhabilidades);
+                    console.log('Habilidades seleccionadas:', id_skill, subhabilidades);
                     let responseAxios = await callApiAxios('put', `http://localhost:3000/skills/update`, {
-                        id: this.userProfile.id_skill,
+                        id: id_skill,
                         texto_habilidades: subhabilidades
                     });
                     if (responseAxios.status == 200) {
@@ -462,8 +565,9 @@ export default {
                     }
                 }
             });
-        }
-        ,
+        },
+
+
 
 
         formatSkills(texto_habilidades) {
@@ -488,7 +592,6 @@ export default {
                 return groups;
             }, {});
 
-            // Combina las habilidades en una cadena separada por comas.
             for (let group in habilidadesAgrupadas) {
                 habilidadesAgrupadas[group] = habilidadesAgrupadas[group].join(', ');
             }
