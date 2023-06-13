@@ -62,7 +62,7 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary">Enviar</button>
+      <button type="submit" class="btn btn-primary btn-enviar">Enviar</button>
       <router-link to="/" class="btn btn-secondary" style="margin-left: 10px;">Volver</router-link>
     </form>
   </div>
@@ -209,4 +209,13 @@ export default {
 .input-group-prepend {
   margin-right: -1px;
 }
+
+.btn-enviar {
+  background-color: #6d63ff;
+}
+.btn-enviar:hover {
+  background-color: #6d63ffa9;
+  
+}
+
 </style>

@@ -1,4 +1,5 @@
 <template>
+    <div class="background-image">
     <div v-if="navPerfil">
         <NavbarUser> </NavbarUser>
     </div>
@@ -65,6 +66,7 @@
             </div>
         </div>
     </div>
+</div>
 </template>
     
 <script>
@@ -619,6 +621,13 @@ export default {
 .swal2-column {
     display: flex;
     flex-direction: column;
+}
+
+.background-image{
+  background-image: url('../../images/undraw_remotely_2j6y.svg');
+   background-size: cover;
+   background-repeat: no-repeat;
+   
 }
 </style>
 

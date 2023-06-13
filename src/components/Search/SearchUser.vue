@@ -154,7 +154,7 @@ export default {
 }**/
 </style>
 
-<style>
+<style scoped>
 .swal2-row {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -178,6 +178,26 @@ export default {
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 4px;
+}
+
+.btn-buscar {
+  background-color: #6d63ff;
+}
+.btn-buscar:hover {
+  background-color: #6d63ffa9;
+  
+}
+
+.background-image{
+  background-image: url('../../images/undraw_remotely_2j6y.svg');
+   background-size: cover;
+   background-repeat: no-repeat;
+   height: 100vh;
+   min-height: 100%;
+}
+
+.my-list{
+  background-color: #f8f8f886;
 }
 </style>
 

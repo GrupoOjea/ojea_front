@@ -27,7 +27,7 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary" @click="createAccount(emailCreate, passCreate, passCreateConfirm)">Guardar</button>
+      <button type="submit" class="btn btn-primary btn-buscar" @click="createAccount(emailCreate, passCreate, passCreateConfirm)">Guardar</button>
     </form>
   </div>
 </template>
@@ -98,6 +98,16 @@ export default {
   transition: color 0.2s ease;
 }
 .eye-button:hover {
-  color: #727272;
+  color: #6d63ffa9;
 }
+
+.btn-buscar {
+  background-color: #6d63ff;
+}
+.btn-buscar:hover {
+  background-color: #6d63ffa9;
+  
+}
+
+
 </style>
