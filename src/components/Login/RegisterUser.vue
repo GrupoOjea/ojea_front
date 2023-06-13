@@ -4,12 +4,12 @@
       <div class="row">
         <div class="col-md-6 mb-3">
           <label for="nameInput" class="form-label">Nombre</label>
-          <input type="text" class="form-control" id="nameInput" v-model="name" />
+          <input type="text" class="form-control" id="nameInput" v-model="nameCamelCase" />
         </div>
 
         <div class="col-md-6 mb-3">
           <label for="surnameInput" class="form-label">Apellido</label>
-          <input type="text" class="form-control" id="surnameInput" v-model="surname" />
+          <input type="text" class="form-control" id="surnameInput" v-model="surnameCamelCase" />
         </div>
 
         <div class="col-md-6 mb-3">
@@ -151,6 +151,11 @@ export default {
       } else {
         this.age = today.year - birthDate.year;
       }
+    },
+    toCamelCase(str) {
+      return str.toLowerCase().replace(/(^| )(\w)/g, function (x) {
+        return x.toUpperCase();
+      });
     }
   },
   computed: {
@@ -159,6 +164,22 @@ export default {
       date.setFullYear(date.getFullYear() - 18);
       return date.toISOString().split("T")[0];
     },
+    nameCamelCase: {
+      get() {
+        return this.name;
+      },
+      set(value) {
+        this.name = this.toCamelCase(value);
+      }
+    },
+    surnameCamelCase: {
+      get() {
+        return this.surname;
+      },
+      set(value) {
+        this.surname = this.toCamelCase(value);
+      }
+    }
   }
 }
 </script>
@@ -187,4 +208,5 @@ export default {
 
 .input-group-prepend {
   margin-right: -1px;
-}</style>
+}
+</style>

@@ -1,0 +1,63 @@
+{
+    "habilidades_informatica": [
+      {
+        "nombre": "Programación",
+        "descripcion": "Capacidad para escribir y desarrollar código en diferentes lenguajes de programación.",
+        "subhabilidades": [
+          "Python",
+          "Java",
+          "C++",
+          "JavaScript",
+          "Ruby",
+          "PHP",
+          "C#",
+          "Swift",
+          "Go",
+          "Rust"
+        ]
+      },
+      {
+        "nombre": "Bases de datos",
+        "descripcion": "Conocimiento en el diseño, implementación y administración de bases de datos utilizando diferentes tipos de sistemas.",
+        "subhabilidades": [
+          "MySQL",
+          "Oracle",
+          "MongoDB",
+          "SQL Server",
+          "PostgreSQL",
+          "SQLite",
+          "Relacionales",
+          "NoSQL",
+          "Columnares",
+          "Documentales",
+          "Grafos",
+          "Objeto-relacionales"
+        ]
+      },
+      {
+        "nombre": "Diseño web",
+        "descripcion": "Habilidad para crear y diseñar sitios web atractivos y funcionales utilizando lenguajes y herramientas.",
+        "subhabilidades": [
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "Frameworks de front-end",
+          "Diseño responsivo",
+          "Accesibilidad web",
+          "Diseño visual",
+          "Herramientas de diseño"
+        ]
+      },
+      {
+        "nombre": "Gestión de proyectos",
+        "descripcion": "Habilidad para planificar, organizar y supervisar proyectos informáticos, asegurando la entrega oportuna y eficiente de los resultados.",
+        "subhabilidades": [
+          "Agile",
+          "Scrum",
+          "Kanban",
+          "Waterfall"
+        ]
+      }
+    ]
+  }
+  
