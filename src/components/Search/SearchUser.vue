@@ -59,6 +59,7 @@ export default {
       dataSearch: null,
       dataLength: 0,
       showCard: false,
+      id_profile: {},
     };
   },
   components: {
@@ -66,7 +67,11 @@ export default {
     NavbarUser
   },
 
-  mounted() {
+  async mounted() {
+    const id = localStorage.getItem('id');
+            const response = await callApiAxios('get', `http://localhost:3000/profile/${id}`, {});
+            console.log("Datos persona", response.data.id)
+            this.id_profile = response.data.id;
   },
 
   methods: {
@@ -81,6 +86,7 @@ export default {
           this.dataSearch = responseAxios.data;
           this.dataLength = this.dataSearch.length;
           this.showCard = true;
+          console.log(this.dataSearch)
 
           // Agregar el handler de click a cada item
           this.dataSearch.forEach(item => {
@@ -99,11 +105,46 @@ export default {
       }
     },
 
-    showDetails(item) {
-      Swal.fire({
-        width: '1400px',
-        heightAuto: false,
-        html: `
+    async createPostulation(type, item) {
+      console.log("ID DEL PERFIL",this.id_profile)
+      console.log("ID DEL job",item.id)
+  try {
+    const response = await callApiAxios('post', 'http://localhost:3000/postulation/create', {
+      tipo_empleo: type,
+      estado: 1, // debes establecer el estado aquí,
+      fecha_creacion: new Date(),
+      fk_persona: this.id_profile, // debes establecer la persona aquí,
+      fk_empleo: item.id // debes establecer el empleo aquí
+    });
+
+    if (response.status !== 201) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    Swal.fire(
+      'Éxito',
+      'La postulación se ha creado con éxito',
+      'success'
+    )
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    Swal.fire(
+      'Error',
+      'Hubo un problema al crear la postulación',
+      'error'
+    )
+  }
+},
+
+
+showDetails(item) {
+  console.log("Aqui viene el los Datos del Item",item);
+  Swal.fire({
+    width: '1400px',
+    heightAuto: false,
+    html: `
       <div class="data-box">
         <h2>${item.cargo}</h2>
         <p>${item.nombre}. ${item.comuna}, ${item.region}, Chile (${item.modalidad})</p>
@@ -116,12 +157,19 @@ export default {
         <p>${item.descripcion}</p>
       </div>
     `,
-        confirmButtonText: 'Guardar',
-        showCancelButton: true,
-        cancelButtonText: 'Solicitar',
-      })
-    },
-
+    confirmButtonText: 'Guardar',
+    showCancelButton: true,
+    cancelButtonText: 'Cancelar',
+    preConfirm: () => this.createPostulation(2, item), // para 'Guardar'
+    showDenyButton: true,
+    denyButtonText: 'Solicitar',
+    denyButtonAriaLabel: 'Solicitar'
+  }).then((result) => {
+    if (result.isDenied) {
+      this.createPostulation(1, item); // para 'Solicitar'
+    }
+  })
+}
 
 
 
