@@ -13,6 +13,7 @@ import Interaction from './components/Interaction/Interaction.vue'
 import RegisterUser from './components/Login/RegisterUser.vue' 
 import SearchUser from './components/Search/SearchUser.vue'
 import ProfileUser from './components/Profile/ProfileUser.vue'
+import MyJobs from './components/Jobs/MyJobs.vue'
 const routes = [
   {
     path: '/',
@@ -83,6 +84,11 @@ const routes = [
     path: '/profile-user',
     name: 'profile-user',
     component: ProfileUser
+  },
+  {
+    path: '/my-jobs',
+    name: 'MyJobs',
+    component: MyJobs
   }
  
  
