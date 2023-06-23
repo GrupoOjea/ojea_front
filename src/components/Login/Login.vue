@@ -1,6 +1,8 @@
 <template>
   <div class="content" style="margin: 25px">
-    <button @click="goBack" class="back-button"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="back-button-container">
+      <button @click="goBack" class="back-button"><i class="fa-solid fa-arrow-left"></i></button>
+    </div>
     <loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage" />
     <div class="container">
       <div class="row">
@@ -76,7 +78,7 @@ export default {
 
     async login(email, pass) {
       this.isLoading = true;
-      
+
       if (!email || !pass) {
         Swal.fire({
           icon: 'error',
@@ -87,7 +89,7 @@ export default {
         return;
       }
 
-      let responseAxios = await callApiAxios('post', 'http://localhost:3000/login/session', {
+      let responseAxios = await callApiAxios('post', this.$baseURL + '/login/session', {
         'email': email,
         'clave': pass,
       });
@@ -98,11 +100,11 @@ export default {
         if (estado == 0) {
           localStorage.setItem('id', id);
           localStorage.setItem('estado', estado);
-          localStorage.setItem('tipo', tipo_perfil);
+          localStorage.setItem('tipo_perfil', tipo_perfil);
 
           if (tipo_perfil == 1) {
             try {
-              const getPersonInformation = await callApiAxios('get', `http://localhost:3000/profile/${id}`, {});
+              const getPersonInformation = await callApiAxios('get', this.$baseURL + `/profile/${id}`, {});
               console.log(getPersonInformation)
               if (getPersonInformation && getPersonInformation.data && Object.keys(getPersonInformation.data).length > 0) {
                 console.log(getPersonInformation.data)
@@ -113,9 +115,10 @@ export default {
             } catch (error) {
               console.log('Error en la llamada a la API:', error);
             }
-          }else if (tipo_perfil == 2) {
+          } else if (tipo_perfil == 2) {
+            localStorage.setItem('isAuthenticated', 'true');
             try {
-              const getInformationCompany = await callApiAxios('get', `http://localhost:3000/company/${id}`, {});
+              const getInformationCompany = await callApiAxios('get', this.$baseURL + `/company/${id}`, {});
               if (getInformationCompany && getInformationCompany.data) {
                 let id_company = getInformationCompany.data.id;
                 let nombre = getInformationCompany.data.nombre;
@@ -143,6 +146,7 @@ export default {
           });
           return;
         } else {
+          localStorage.setItem('isAuthenticated', 'true');
           localStorage.setItem('id', id);
           this.$router.push('/search-user');
           localStorage.setItem('estado', estado);
@@ -174,20 +178,18 @@ export default {
 </script>
 
 <style scoped>
-.back-button {
+.back-button-container {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #fff;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  z-index: 1000;
+  top: 20px;
+  left: 20px;
 }
 
-.back-button:hover {
-  background-color: #eee;
+.back-button {
+  background-color: transparent;
+  color: #000000;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
 }
 
 .btn-login {
