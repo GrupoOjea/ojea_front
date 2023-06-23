@@ -81,7 +81,7 @@ export default {
   methods: {
     async getSearcher(dataSearcher, dataWhere) {
       try {
-        let responseAxios = await callApiAxios("post", "http://localhost:3000/jobs/search", {
+        let responseAxios = await callApiAxios("post", this.$baseURL + "/jobs/search", {
           buscador: dataSearcher,
           donde: dataWhere
         });
