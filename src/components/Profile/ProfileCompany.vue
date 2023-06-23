@@ -173,7 +173,7 @@ export default {
     async getCompany() {
       this.isLoading = true;
       const id = localStorage.getItem('id');
-      let responseAxios = await callApiAxios('get', `http://localhost:3000/company/${id}`, {});
+      let responseAxios = await callApiAxios('get', this.$baseURL + `/company/${id}`, {});
 
       this.isLoading = false;
       if (responseAxios.status == 200) {
@@ -185,7 +185,7 @@ export default {
 
     async updateCompany() {
 
-      let responseAxios = await callApiAxios("put", `http://localhost:3000/company/update`, {
+      let responseAxios = await callApiAxios("put", this.$baseURL + `/company/update`, {
         id: this.dataCompany.id,
         nombre: this.dataCompany.nombre,
         run: this.dataCompany.run,

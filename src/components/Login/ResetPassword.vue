@@ -82,7 +82,7 @@ export default {
 
     async resetPassword(email) {
       try {
-        const response = await callApiAxios('put', 'http://localhost:3000/login/forgot-password', {
+        const response = await callApiAxios('put', this.$baseURL + '/login/forgot-password', {
           email: email,
         });
 
@@ -114,7 +114,7 @@ export default {
     },
     async validateSms(smsToken) {
       try {
-        let responseAxios = await callApiAxios('post', 'http://localhost:3000/login/valid-sms', {
+        let responseAxios = await callApiAxios('post', this.$baseURL + '/login/valid-sms', {
           'smstoken': smsToken,
         });
         console.log(responseAxios);

@@ -85,11 +85,11 @@ export default {
         }
         const id = localStorage.getItem('id');
         try {
-            const responseProfile = await callApiAxios('get', `http://localhost:3000/profile/${id}`, {});
+            const responseProfile = await callApiAxios('get', this.$baseURL + `/profile/${id}`, {});
             console.log("Datos persona", responseProfile.data.id)
             this.id_profile = responseProfile.data.id;
 
-            const response = await callApiAxios('get', `http://localhost:3000/postulation/my-jobs/${this.id_profile}`, {});
+            const response = await callApiAxios('get', this.$baseURL + `/postulation/my-jobs/${this.id_profile}`, {});
             const jobs = response.data;
             console.log(jobs);
 
@@ -112,7 +112,7 @@ export default {
                 id: job.id,
                 fk_empleo: job.fk_empleo
             };
-            let responseAxios = await callApiAxios("put", `http://localhost:3000/postulation/update`, data);
+            let responseAxios = await callApiAxios("put", this.$baseURL + `/postulation/update`, data);
             if (responseAxios.status === 200) {
                 Swal.fire({
                     icon: 'success',
@@ -129,7 +129,7 @@ export default {
                 id: job.id,
                 fk_empleo: job.fk_empleo
             };
-            let responseAxios = await callApiAxios("put", `http://localhost:3000/postulation/update`, data);
+            let responseAxios = await callApiAxios("put", this.$baseURL + `/postulation/update`, data);
             if (responseAxios.status === 200) {
                 Swal.fire({
                     icon: 'success',

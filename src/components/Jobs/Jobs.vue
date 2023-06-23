@@ -164,7 +164,7 @@ export default {
         job.modalidad = formValues[6]
         job.aptitudes = formValues[7]
         job.experiencia = parseInt(formValues[8])
-        let responseAxios = await callApiAxios("put", `http://localhost:3000/jobs/update`, job);
+        let responseAxios = await callApiAxios("put", this.$baseURL + `/jobs/update`, job);
         if (responseAxios.status == 200) {
           Swal.fire('Actualizado', 'El trabajo ha sido actualizado.', 'success');
         } else {
@@ -174,7 +174,7 @@ export default {
     },
 
     async fetchData(id) {
-      let responseAxios = await callApiAxios("get", `http://localhost:3000/jobs/company/${id}`, {});
+      let responseAxios = await callApiAxios("get", this.$baseURL + `/jobs/company/${id}`, {});
       if (responseAxios.status == 200) {
         return responseAxios.data;
       } else {

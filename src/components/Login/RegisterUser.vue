@@ -132,7 +132,7 @@ export default {
 
       const id = localStorage.getItem('id');
       try {
-        let responseAxios = await callApiAxios('post', 'http://localhost:3000/profile/create', {
+        let responseAxios = await callApiAxios('post', this.$baseURL + '/profile/create', {
           'nombre': this.name,
           'apellido': this.surname,
           'edad': this.age,

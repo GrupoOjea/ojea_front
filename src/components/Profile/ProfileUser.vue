@@ -114,7 +114,7 @@ export default {
         }
         const id = localStorage.getItem('id');
         try {
-            const response = await callApiAxios('get', `http://localhost:3000/profile/${id}`, {});
+            const response = await callApiAxios('get', this.$baseURL + `/profile/${id}`, {});
             this.userProfile = response.data;
             console.log(this.userProfile)
             this.groupedSkills = this.userProfile.habilidades.reduce((acc, habilidad) => {
@@ -127,11 +127,11 @@ export default {
                 return acc;
             }, {});
 
-            const responseSkills = await callApiAxios('get', `http://localhost:3000/skills/mainskills`, {});
+            const responseSkills = await callApiAxios('get', this.$baseURL + `/skills/mainskills`, {});
             this.skills = responseSkills.data;
             console.log(this.skills)
 
-            const responseEducation = await callApiAxios('get', `http://localhost:3000/education/get/${id}`, {});
+            const responseEducation = await callApiAxios('get', this.$baseURL + `/education/get/${id}`, {});
             this.education = responseEducation.data;
             console.log(this.education)
 
@@ -232,7 +232,7 @@ export default {
                 }
             }).then(async result => {
                 if (result.isConfirmed) {
-                    let responseAxios = await callApiAxios('put', `http://localhost:3000/profile/update`, result.value);
+                    let responseAxios = await callApiAxios('put', this.$baseURL + `/profile/update`, result.value);
                     console.log("status", responseAxios.status)
                     if (responseAxios.status == 200) {
                         Swal.fire('Actualizado', 'Los datos personales han sido actualizado.', 'success').then(() => {
@@ -326,7 +326,7 @@ export default {
                 }
             }).then(async result => {
                 if (result.isConfirmed) {
-                    let responseAxios = await callApiAxios('post', `http://localhost:3000/education/create`, result.value);
+                    let responseAxios = await callApiAxios('post', this.$baseURL + `/education/create`, result.value);
                     if (responseAxios.status === 201) {
                         Swal.fire({
                             icon: 'success',
@@ -352,7 +352,7 @@ export default {
             let currentYear = date.getFullYear();
             let months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-            callApiAxios('get', `http://localhost:3000/education/get-edit/${id}`, {})
+            callApiAxios('get', this.$baseURL + `/education/get-edit/${id}`, {})
                 .then((response) => {
 
                     let education = response.data[0];
@@ -460,7 +460,7 @@ export default {
                                 }).then(async (result) => {
                                     if (result.isConfirmed) {
                                         try {
-                                            let responseAxios = await callApiAxios('delete', `http://localhost:3000/education/delete/${id}`, {});
+                                            let responseAxios = await callApiAxios('delete', this.$baseURL + `/education/delete/${id}`, {});
                                             console.log("status", responseAxios.status);
                                             if (responseAxios.status == 200) {
                                                 Swal.fire('Eliminado', 'Los datos de educación han sido eliminados.', 'success').then(() => {
@@ -493,7 +493,7 @@ export default {
                             console.log(result.value);
 
                             try {
-                                let responseAxios = await callApiAxios('put', `http://localhost:3000/education/update`, result.value);
+                                let responseAxios = await callApiAxios('put', this.$baseURL + `/education/update`, result.value);
                                 console.log("status", responseAxios.status);
                                 if (responseAxios.status == 200) {
                                     Swal.fire('Actualizado', 'Los datos de educación han sido actualizados.', 'success').then(() => {
@@ -543,7 +543,7 @@ export default {
                     const habilidadPrincipal = result.value.habilidadPrincipal;
                     const habilidadId = result.value.habilidadId;
 
-                    const responseSubSkills = await callApiAxios('get', `http://localhost:3000/skills/subskills/${habilidadId}`, {});
+                    const responseSubSkills = await callApiAxios('get', this.$baseURL + `/skills/subskills/${habilidadId}`, {});
                     this.subSkills = responseSubSkills.data;
 
                     Swal.fire({
@@ -587,7 +587,7 @@ export default {
                             const subhabilidades = result.value.subhabilidades;
 
                             const createRequests = subhabilidades.map((fk_subhabilidad) => {
-                                return callApiAxios('post', `http://localhost:3000/skills/create`, {
+                                return callApiAxios('post', this.$baseURL + `/skills/create`, {
                                     'fk_subhabilidad': Number(fk_subhabilidad),
                                     'fk_persona': this.userProfile.id,
                                 });
@@ -617,7 +617,7 @@ export default {
         async deleteSubSkill(id_skill) {
             console.log("ID de la subhabilidad seleccionada para eliminar: ", id_skill);
             try {
-                let response = await callApiAxios('delete', `http://localhost:3000/skills/delete/${id_skill}`, {});
+                let response = await callApiAxios('delete', this.$baseURL + `/skills/delete/${id_skill}`, {});
                 if (response.status == 200) {
                     Swal.fire('Eliminado', 'La subhabilidad ha sido eliminada.', 'success').then(() => {
                         window.location.reload();
