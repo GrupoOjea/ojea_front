@@ -13,7 +13,7 @@
           <input id="where" name="where" v-model="dataWhere" type="text" class="form-control" placeholder="¿Donde?" />
         </div>
         <div class="col-4">
-          <button type="button" class="btn btn-primary btn-buscar"
+          <button type="button" class="btn btn-custom"
             @click="getSearcher(dataSearcher, dataWhere)">Buscar</button>
         </div>
       </div>
@@ -21,7 +21,7 @@
 
     <div class="card my-list" style="margin: 15px" v-if="showCard">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item my-list" style="background-color: #5c5b5b; color: white;">
+        <li class="list-group-item no-hover" style="background-color: #5c5b5b; color: white;">
           <div style="display: flex; justify-content: space-between;">
             <span>Buscaste: {{ dataSearcher }}</span>
             <span>{{ dataLength }} resultados</span>
@@ -68,10 +68,14 @@ export default {
   },
 
   async mounted() {
+    if (localStorage.getItem('isAuthenticated') !== 'true' || localStorage.getItem('tipo_perfil') !== '1') {
+      this.$router.push({ name: 'Login' });
+      return;
+    }
     const id = localStorage.getItem('id');
-            const response = await callApiAxios('get', `http://localhost:3000/profile/${id}`, {});
-            console.log("Datos persona", response.data.id)
-            this.id_profile = response.data.id;
+    const response = await callApiAxios('get', `http://localhost:3000/profile/${id}`, {});
+    console.log("Datos persona", response.data.id)
+    this.id_profile = response.data.id;
   },
 
   methods: {
@@ -106,45 +110,45 @@ export default {
     },
 
     async createPostulation(type, item) {
-      console.log("ID DEL PERFIL",this.id_profile)
-      console.log("ID DEL job",item.id)
-  try {
-    const response = await callApiAxios('post', 'http://localhost:3000/postulation/create', {
-      tipo_empleo: type,
-      estado: 1, // debes establecer el estado aquí,
-      fecha_creacion: new Date(),
-      fk_persona: this.id_profile, // debes establecer la persona aquí,
-      fk_empleo: item.id // debes establecer el empleo aquí
-    });
+      console.log("ID DEL PERFIL", this.id_profile)
+      console.log("ID DEL job", item.id)
+      try {
+        const response = await callApiAxios('post', 'http://localhost:3000/postulation/create', {
+          tipo_empleo: type,
+          estado: 1, // debes establecer el estado aquí,
+          fecha_creacion: new Date(),
+          fk_persona: this.id_profile, // debes establecer la persona aquí,
+          fk_empleo: item.id // debes establecer el empleo aquí
+        });
 
-    if (response.status !== 201) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+        if (response.status !== 201) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-    Swal.fire(
-      'Éxito',
-      'La postulación se ha creado con éxito',
-      'success'
-    )
+        Swal.fire(
+          'Éxito',
+          'La postulación se ha creado con éxito',
+          'success'
+        )
 
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    Swal.fire(
-      'Error',
-      'Hubo un problema al crear la postulación',
-      'error'
-    )
-  }
-},
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        Swal.fire(
+          'Error',
+          'Hubo un problema al crear la postulación',
+          'error'
+        )
+      }
+    },
 
 
-showDetails(item) {
-  console.log("Aqui viene el los Datos del Item",item);
-  Swal.fire({
-    width: '1400px',
-    heightAuto: false,
-    html: `
+    showDetails(item) {
+      console.log("Aqui viene el los Datos del Item", item);
+      Swal.fire({
+        width: '1400px',
+        heightAuto: false,
+        html: `
       <div class="data-box">
         <h2>${item.cargo}</h2>
         <p>${item.nombre}. ${item.comuna}, ${item.region}, Chile (${item.modalidad})</p>
@@ -157,95 +161,56 @@ showDetails(item) {
         <p>${item.descripcion}</p>
       </div>
     `,
-    confirmButtonText: 'Guardar',
-    showCancelButton: true,
-    cancelButtonText: 'Cancelar',
-    preConfirm: () => this.createPostulation(2, item), // para 'Guardar'
-    showDenyButton: true,
-    denyButtonText: 'Solicitar',
-    denyButtonAriaLabel: 'Solicitar'
-  }).then((result) => {
-    if (result.isDenied) {
-      this.createPostulation(1, item); // para 'Solicitar'
+        confirmButtonText: 'Guardar',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => this.createPostulation(2, item), // para 'Guardar'
+        showDenyButton: true,
+        denyButtonText: 'Solicitar',
+        denyButtonAriaLabel: 'Solicitar'
+      }).then((result) => {
+        if (result.isDenied) {
+          this.createPostulation(1, item); // para 'Solicitar'
+        }
+      })
     }
-  })
-}
-
-
-
-
-
 
   },
 };
 </script>
 
 <style scoped>
-/*.btn-buscar {
-  background-color: #6d63ff;
-}
-.btn-buscar:hover {
-  background-color: #6d63ffa9;
-  
+/* Personalización de los botones */
+.btn-custom {
+  background-color: #ffb347; /* color de fondo */
+  color: black; /* color de texto */
+  border: none; /* eliminar el borde */
 }
 
-.background-image{
+.btn-custom:hover {
+  background-color: #ffcc99; /* color de fondo al pasar el mouse */
+  color: black; /* color de texto al pasar el mouse */
+}
+
+.btn-custom:active {
+  background-color: #ffcc99; /* color de fondo al hacer clic */
+  color: black; /* color de texto al hacer clic */
+  box-shadow: none; /* eliminar la sombra al hacer clic */
+}
+
+.background-image {
   background-image: url('../../images/undraw_remotely_2j6y.svg');
-   background-size: cover;
-   background-repeat: no-repeat;
-   height: 100vh;
-   min-height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  min-height: 100%;
 }
 
-.my-list{
-  background-color: #f8f8f886;
-}**/
-</style>
-
-<style scoped>
-.swal2-row {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.swal2-row label {
-  text-align: right;
-}
-
-.swal2-row *,
-.swal2-row *:before,
-.swal2-row *:after {
-  box-sizing: border-box;
-}
-
-/* Añade estos estilos para el cuadro */
-.data-box {
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 4px;
-}
-
-.btn-buscar {
-  background-color: #6d63ff;
-}
-.btn-buscar:hover {
-  background-color: #6d63ffa9;
-  
-}
-
-.background-image{
-  background-image: url('../../images/undraw_remotely_2j6y.svg');
-   background-size: cover;
-   background-repeat: no-repeat;
-   height: 100vh;
-   min-height: 100%;
-}
-
-.my-list{
+.my-list {
   background-color: #f8f8f886;
 }
-</style>
+
+.list-group-item.my-list:hover {
+  background: linear-gradient(to right, #ffb347, #ffcc99);
+}</style>
 

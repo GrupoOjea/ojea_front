@@ -1,69 +1,76 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Register from './components/Login/Register.vue'
-import Home from './components/Login/Home.vue'
-import Login from './components/Login/Login.vue'
-import NewPassword from './components/Login/NewPassword.vue'
-import ResetPassword from './components/Login/ResetPassword.vue'
-import Search from './components/Search/Search.vue'
-import NavbarCompany from './components/Navbar/NavbarCompany.vue'
-import ProfileCompany from './components/Profile/ProfileCompany.vue'
-import FormJob from './components/Form/FormJob.vue'
-import Jobs from './components/Jobs/Jobs.vue'
-import Interaction from './components/Interaction/Interaction.vue'
-import RegisterUser from './components/Login/RegisterUser.vue' 
-import SearchUser from './components/Search/SearchUser.vue'
-import ProfileUser from './components/Profile/ProfileUser.vue'
-import MyJobs from './components/Jobs/MyJobs.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import Register from './components/Login/Register.vue';
+import Home from './components/Login/Home.vue';
+import Login from './components/Login/Login.vue';
+import NewPassword from './components/Login/NewPassword.vue';
+import ResetPassword from './components/Login/ResetPassword.vue';
+import Search from './components/Search/Search.vue';
+import NavbarCompany from './components/Navbar/NavbarCompany.vue';
+import ProfileCompany from './components/Profile/ProfileCompany.vue';
+import FormJob from './components/Form/FormJob.vue';
+import Jobs from './components/Jobs/Jobs.vue';
+import Interaction from './components/Interaction/Interaction.vue';
+import RegisterUser from './components/Login/RegisterUser.vue';
+import SearchUser from './components/Search/SearchUser.vue';
+import ProfileUser from './components/Profile/ProfileUser.vue';
+import MyJobs from './components/Jobs/MyJobs.vue';
+
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
   },
   {
     path: '/reset-password',
     name: 'ResetPassword',
-    component: ResetPassword
+    component: ResetPassword,
   },
   {
     path: '/new-password',
     name: 'NewPassword',
-    component: NewPassword
+    component: NewPassword,
   },
   {
     path: '/search',
     name: 'Search',
-    component: Search
+    component: Search,
+    meta: { requiresAuth: true },
   },
   {
     path: '/navbar-company',
     name: 'NavbarCompany',
-    component: NavbarCompany
+    component: NavbarCompany,
+    meta: { requiresAuth: true },
   },
   {
     path: '/profile-company',
     name: 'ProfileCompany',
-    component: ProfileCompany
+    component: ProfileCompany,
+    meta: { requiresAuth: true },
   },
   {
     path: '/form-job',
     name: 'FormJob',
-    component: FormJob
+    component: FormJob,
+    meta: { requiresAuth: true },
   },
   {
     path: '/jobs',
     name: 'Jobs',
-    component: Jobs
+    component: Jobs,
+    meta: { requiresAuth: true },
   },
   {
     path: '/interaction/:id',
     name: 'interaction',
-    component: Interaction
+    component: Interaction,
+    meta: { requiresAuth: true },
   },
   {
     path: '/register',
@@ -73,30 +80,48 @@ const routes = [
   {
     path: '/register-user/:id',
     name: 'register-user',
-    component: RegisterUser
+    component: RegisterUser,
+    meta: { requiresAuth: true },
   },
   {
     path: '/search-user',
     name: 'search-user',
-    component: SearchUser
+    component: SearchUser,
+    meta: { requiresAuth: true },
   },
   {
     path: '/profile-user',
     name: 'profile-user',
-    component: ProfileUser
+    component: ProfileUser,
+    meta: { requiresAuth: true },
   },
   {
     path: '/my-jobs',
     name: 'MyJobs',
-    component: MyJobs
-  }
- 
- 
-]
+    component: MyJobs,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/:catchAll(.*)',
+    redirect: '/', // o a donde quieras que se redirija cuando la ruta no existe
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
-})
+  routes,
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (localStorage.getItem('isAuthenticated') !== 'true') {
+      next({ name: 'Login' });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;

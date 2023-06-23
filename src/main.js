@@ -1,13 +1,14 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
-import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/css/all.css';
 
-const app = createApp(App)
+const baseURL = process.env.NODE_ENV === 'production' ? 'http://ojea.cl' : 'http://localhost:3000';
 
-app.use(router)
-app.mount('#app')
+const app = createApp(App);
+app.use(router);
+app.mount('#app');
 
-
+app.config.globalProperties.$baseURL = baseURL;

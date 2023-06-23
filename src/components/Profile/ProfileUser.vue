@@ -6,7 +6,10 @@
 
         <div class="card card-margin">
             <div class="card-body">
-                <h4>Mi perfil</h4>
+                <div class="profile-header">
+                    <button @click="goBack" class="back-button"><i class="fa-solid fa-arrow-left"></i></button>
+                    <h4>Mi perfil</h4>
+                </div>
             </div>
         </div>
 
@@ -105,6 +108,10 @@ export default {
         };
     },
     async mounted() {
+        if (localStorage.getItem('isAuthenticated') !== 'true' || localStorage.getItem('tipo_perfil') !== '1') {
+            this.$router.push({ name: 'Login' });
+            return;
+        }
         const id = localStorage.getItem('id');
         try {
             const response = await callApiAxios('get', `http://localhost:3000/profile/${id}`, {});
@@ -340,60 +347,60 @@ export default {
         },
 
         editEducation(id) {
-    console.log("Editing education with id:", id);
-    let date = new Date();
-    let currentYear = date.getFullYear();
-    let months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            console.log("Editing education with id:", id);
+            let date = new Date();
+            let currentYear = date.getFullYear();
+            let months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-    callApiAxios('get', `http://localhost:3000/education/get-edit/${id}`, {})
-        .then((response) => {
+            callApiAxios('get', `http://localhost:3000/education/get-edit/${id}`, {})
+                .then((response) => {
 
-            let education = response.data[0];
+                    let education = response.data[0];
 
-            console.log(this.institucionData);
-            console.log(education.institucion);
+                    console.log(this.institucionData);
+                    console.log(education.institucion);
 
-            let institucionOptions = this.institucionData.map(institucion => {
-                const selected = education.institucion === institucion.institucion ? 'selected' : '';
-                return `<option value="${institucion.institucion}" ${selected}>${institucion.institucion}</option>`;
-            }).join('');
+                    let institucionOptions = this.institucionData.map(institucion => {
+                        const selected = education.institucion === institucion.institucion ? 'selected' : '';
+                        return `<option value="${institucion.institucion}" ${selected}>${institucion.institucion}</option>`;
+                    }).join('');
 
-            let selectedInstitucion = this.institucionData.find(institucion => institucion.institucion === education.institucion);
+                    let selectedInstitucion = this.institucionData.find(institucion => institucion.institucion === education.institucion);
 
-            let carreraOptions = '';
-            if (selectedInstitucion && selectedInstitucion.carreras) {
-                carreraOptions = selectedInstitucion.carreras.map(carrera => {
-                    const selected = education.titulo === carrera ? 'selected' : '';
-                    return `<option value="${carrera}" ${selected}>${carrera}</option>`;
-                }).join('');
-            }
+                    let carreraOptions = '';
+                    if (selectedInstitucion && selectedInstitucion.carreras) {
+                        carreraOptions = selectedInstitucion.carreras.map(carrera => {
+                            const selected = education.titulo === carrera ? 'selected' : '';
+                            return `<option value="${carrera}" ${selected}>${carrera}</option>`;
+                        }).join('');
+                    }
 
-            let monthOptionsInicio = months.map(month => {
-                const selected = education.mes_inicio === month ? 'selected' : '';
-                return `<option value="${month}" ${selected}>${month}</option>`;
-            }).join('');
+                    let monthOptionsInicio = months.map(month => {
+                        const selected = education.mes_inicio === month ? 'selected' : '';
+                        return `<option value="${month}" ${selected}>${month}</option>`;
+                    }).join('');
 
-            let monthOptionsFin = months.map(month => {
-                const selected = education.mes_fin === month ? 'selected' : '';
-                return `<option value="${month}" ${selected}>${month}</option>`;
-            }).join('');
+                    let monthOptionsFin = months.map(month => {
+                        const selected = education.mes_fin === month ? 'selected' : '';
+                        return `<option value="${month}" ${selected}>${month}</option>`;
+                    }).join('');
 
-            let yearOptionsInicio = Array.from({ length: currentYear - 1950 + 1 }, (_, i) => {
-                const year = 1950 + i;
-                const selected = education.ano_inicio === year ? 'selected' : '';
-                return `<option value="${year}" ${selected}>${year}</option>`;
-            }).join('');
+                    let yearOptionsInicio = Array.from({ length: currentYear - 1950 + 1 }, (_, i) => {
+                        const year = 1950 + i;
+                        const selected = education.ano_inicio === year ? 'selected' : '';
+                        return `<option value="${year}" ${selected}>${year}</option>`;
+                    }).join('');
 
-            let yearOptionsFin = Array.from({ length: 2050 - education.ano_inicio + 1 }, (_, i) => {
-                const year = education.ano_inicio + i;
-                const selected = education.ano_fin === year ? 'selected' : '';
-                return `<option value="${year}" ${selected}>${year}</option>`;
-            }).join('');
+                    let yearOptionsFin = Array.from({ length: 2050 - education.ano_inicio + 1 }, (_, i) => {
+                        const year = education.ano_inicio + i;
+                        const selected = education.ano_fin === year ? 'selected' : '';
+                        return `<option value="${year}" ${selected}>${year}</option>`;
+                    }).join('');
 
-            Swal.fire({
-                width: '800px',
-                title: 'Editar Educación',
-                html: `
+                    Swal.fire({
+                        width: '800px',
+                        title: 'Editar Educación',
+                        html: `
                     <div class="swal2-content">
                         <div class="swal2-row">
                             <label class="swal2-label">Institución:</label>
@@ -424,88 +431,88 @@ export default {
                         </div>
                     </div>
                 `,
-                confirmButtonText: 'Guardar',
-                showCancelButton: true,
-                didOpen: () => {
-                    document.getElementById('editInstitucion').addEventListener('change', (e) => {
-                        const selectedInstitucion = e.target.value;
-                        let institucionData = this.institucionData.find(institucion => institucion.institucion === selectedInstitucion);
+                        confirmButtonText: 'Guardar',
+                        showCancelButton: true,
+                        didOpen: () => {
+                            document.getElementById('editInstitucion').addEventListener('change', (e) => {
+                                const selectedInstitucion = e.target.value;
+                                let institucionData = this.institucionData.find(institucion => institucion.institucion === selectedInstitucion);
 
-                        let carreraOptions = '';
-                        if (institucionData && institucionData.carreras) {
-                            carreraOptions = institucionData.carreras.map(carrera => {
-                                return `<option value="${carrera}">${carrera}</option>`;
-                            }).join('');
-                        }
-
-                        document.getElementById('editCarrera').innerHTML = carreraOptions;
-                    });
-
-                    document.getElementById('deleteButton').addEventListener('click', () => {
-                        Swal.fire({
-                            width: '800px',
-                            title: 'Eliminar Educación',
-                            text: '¿Estás seguro de que deseas eliminar esta educación?',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Sí, eliminar',
-                            cancelButtonText: 'Cancelar',
-                        }).then(async (result) => {
-                            if (result.isConfirmed) {
-                                try {
-                                    let responseAxios = await callApiAxios('delete', `http://localhost:3000/education/delete/${id}`, {});
-                                    console.log("status", responseAxios.status);
-                                    if (responseAxios.status == 200) {
-                                        Swal.fire('Eliminado', 'Los datos de educación han sido eliminados.', 'success').then(() => {
-                                            window.location.reload();
-                                        });
-                                    } else {
-                                        Swal.fire('Error', 'Hubo un problema al eliminar los datos de educación.', 'error');
-                                    }
-                                } catch (error) {
-                                    console.error("Error:", error);
-                                    Swal.fire('Error', 'Hubo un problema al eliminar los datos de educación.', 'error');
+                                let carreraOptions = '';
+                                if (institucionData && institucionData.carreras) {
+                                    carreraOptions = institucionData.carreras.map(carrera => {
+                                        return `<option value="${carrera}">${carrera}</option>`;
+                                    }).join('');
                                 }
-                            }
-                        });
-                    });
-                },
-                preConfirm: () => {
-                    return {
-                        institucion: document.getElementById('editInstitucion').value,
-                        titulo: document.getElementById('editCarrera').value,
-                        mes_inicio: document.getElementById('editMesInicio').value,
-                        ano_inicio: parseInt(document.getElementById('editAnoInicio').value),
-                        mes_fin: document.getElementById('editMesFin').value,
-                        ano_fin: parseInt(document.getElementById('editAnoFin').value),
-                        'id': id
-                    };
-                }
-            }).then(async (result) => {
-                if (result.value) {
-                    console.log(result.value);
 
-                    try {
-                        let responseAxios = await callApiAxios('put', `http://localhost:3000/education/update`, result.value);
-                        console.log("status", responseAxios.status);
-                        if (responseAxios.status == 200) {
-                            Swal.fire('Actualizado', 'Los datos de educación han sido actualizados.', 'success').then(() => {
-                                window.location.reload();
+                                document.getElementById('editCarrera').innerHTML = carreraOptions;
                             });
-                        } else {
-                            Swal.fire('Error', 'Hubo un problema al actualizar los datos de educación.', 'error');
+
+                            document.getElementById('deleteButton').addEventListener('click', () => {
+                                Swal.fire({
+                                    width: '800px',
+                                    title: 'Eliminar Educación',
+                                    text: '¿Estás seguro de que deseas eliminar esta educación?',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Sí, eliminar',
+                                    cancelButtonText: 'Cancelar',
+                                }).then(async (result) => {
+                                    if (result.isConfirmed) {
+                                        try {
+                                            let responseAxios = await callApiAxios('delete', `http://localhost:3000/education/delete/${id}`, {});
+                                            console.log("status", responseAxios.status);
+                                            if (responseAxios.status == 200) {
+                                                Swal.fire('Eliminado', 'Los datos de educación han sido eliminados.', 'success').then(() => {
+                                                    window.location.reload();
+                                                });
+                                            } else {
+                                                Swal.fire('Error', 'Hubo un problema al eliminar los datos de educación.', 'error');
+                                            }
+                                        } catch (error) {
+                                            console.error("Error:", error);
+                                            Swal.fire('Error', 'Hubo un problema al eliminar los datos de educación.', 'error');
+                                        }
+                                    }
+                                });
+                            });
+                        },
+                        preConfirm: () => {
+                            return {
+                                institucion: document.getElementById('editInstitucion').value,
+                                titulo: document.getElementById('editCarrera').value,
+                                mes_inicio: document.getElementById('editMesInicio').value,
+                                ano_inicio: parseInt(document.getElementById('editAnoInicio').value),
+                                mes_fin: document.getElementById('editMesFin').value,
+                                ano_fin: parseInt(document.getElementById('editAnoFin').value),
+                                'id': id
+                            };
                         }
-                    } catch (error) {
-                        console.error("Error:", error);
-                        Swal.fire('Error', 'Hubo un problema al actualizar los datos de educación.', 'error');
-                    }
-                }
-            })
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
-},
+                    }).then(async (result) => {
+                        if (result.value) {
+                            console.log(result.value);
+
+                            try {
+                                let responseAxios = await callApiAxios('put', `http://localhost:3000/education/update`, result.value);
+                                console.log("status", responseAxios.status);
+                                if (responseAxios.status == 200) {
+                                    Swal.fire('Actualizado', 'Los datos de educación han sido actualizados.', 'success').then(() => {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire('Error', 'Hubo un problema al actualizar los datos de educación.', 'error');
+                                }
+                            } catch (error) {
+                                console.error("Error:", error);
+                                Swal.fire('Error', 'Hubo un problema al actualizar los datos de educación.', 'error');
+                            }
+                        }
+                    })
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        },
 
         addSkills() {
             const habilidadesExistentes = this.userProfile.habilidades.flatMap(h => h.sub_habilidad);
@@ -655,6 +662,9 @@ export default {
         textTransform(text) {
             return text.charAt(0).toUpperCase() + text.slice(1);
         },
+        goBack() {
+            this.$router.push('/search-user');
+        }
     },
     computed: {
         filteredHabilidades() {
@@ -758,6 +768,20 @@ export default {
     top: 0;
     right: 0;
     cursor: pointer;
+}
+.back-button {
+    background-color: transparent;
+    color: #000000;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    background-color: transparent;
+    margin-right: 10px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
 }
 </style>
 
