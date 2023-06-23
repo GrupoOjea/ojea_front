@@ -73,7 +73,7 @@ export default {
       return;
     }
     const id = localStorage.getItem('id');
-    const response = await callApiAxios('get', `http://localhost:3000/profile/${id}`, {});
+    const response = await callApiAxios('get', this.$baseURL + `/profile/${id}`, {});
     console.log("Datos persona", response.data.id)
     this.id_profile = response.data.id;
   },
@@ -113,7 +113,7 @@ export default {
       console.log("ID DEL PERFIL", this.id_profile)
       console.log("ID DEL job", item.id)
       try {
-        const response = await callApiAxios('post', 'http://localhost:3000/postulation/create', {
+        const response = await callApiAxios('post', this.$baseURL + '/postulation/create', {
           tipo_empleo: type,
           estado: 1, // debes establecer el estado aquí,
           fecha_creacion: new Date(),

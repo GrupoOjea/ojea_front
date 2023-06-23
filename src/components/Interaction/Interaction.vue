@@ -75,7 +75,7 @@ export default {
   methods: {
 
     async getPostulation() {
-      let responseAxios = await callApiAxios("get", `http://localhost:3000/postulation/${this.jobId}`, {});
+      let responseAxios = await callApiAxios("get", this.$baseURL + `/postulation/${this.jobId}`, {});
       if (responseAxios.status == 200) {
         this.postulado = responseAxios.data.postulado;
         this.guardado = responseAxios.data.guardado;
@@ -86,7 +86,7 @@ export default {
     },
 
     async getInformation() {
-      let responseAxios = await callApiAxios("get", `http://localhost:3000/postulation/information/${this.jobId}`, {});
+      let responseAxios = await callApiAxios("get", this.$baseURL + `/postulation/information/${this.jobId}`, {});
       if (responseAxios.status == 200) {
         console.log(responseAxios.data)
         return responseAxios.data;
@@ -126,7 +126,7 @@ export default {
       }
 
       try {
-        let respuestaAxios = await callApiAxios("post", `http://localhost:3000/postulation/send`, datos);
+        let respuestaAxios = await callApiAxios("post", this.$baseURL + `/postulation/send`, datos);
 
         if (respuestaAxios.status === 201) {
           Swal.fire(

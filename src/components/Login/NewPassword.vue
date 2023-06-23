@@ -87,7 +87,7 @@ export default {
       if (pass1 === pass2) {
         const smstokenexample = localStorage.getItem('smstoken');
         try {
-          let responseAxios = await callApiAxios('put', 'http://localhost:3000/login/new-password', {
+          let responseAxios = await callApiAxios('put', this.$baseURL + '/login/new-password', {
             'newpassword': pass2,
             'smstoken': smstokenexample,
           });

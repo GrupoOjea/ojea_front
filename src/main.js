@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import '@fortawesome/fontawesome-free/css/all.css';
 
-const baseURL = process.env.NODE_ENV === 'production' ? 'http://ojea.cl' : 'http://localhost:3000';
+const baseURL = process.env.NODE_ENV === 'production' ? 'http://ojea.cl:3000' : 'http://localhost:3000';
 
 const app = createApp(App);
 app.use(router);
