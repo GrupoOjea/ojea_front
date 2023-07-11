@@ -13,8 +13,7 @@
           <input id="where" name="where" v-model="dataWhere" type="text" class="form-control" placeholder="¿Donde?" />
         </div>
         <div class="col-4">
-          <button type="button" class="btn btn-custom"
-            @click="getSearcher(dataSearcher, dataWhere)">Buscar</button>
+          <button type="button" class="btn btn-custom" @click="getSearcher(dataSearcher, dataWhere)">Buscar</button>
         </div>
       </div>
     </div>
@@ -30,9 +29,9 @@
       </ul>
       <ul class="list-group list-group-flush" v-for="(item, index) in dataSearch" :key="index">
         <li class="list-group-item my-list" @click="item.onClick">
-          <b>{{ item.aptitudes }}</b>
+          <b>{{ item.cargo }} - {{ item.nombre }}</b>
           <br>
-          {{ item.cargo }} - {{ item.nombre }}
+          {{ item.aptitudes }}
           <br>
           {{ item.comuna }}, {{ item.region }}
         </li>
@@ -143,7 +142,26 @@ export default {
     },
 
 
-    showDetails(item) {
+    async showDetails(item) {
+      console.log("Aqui viene el los Datos del Item", item);
+      const id = localStorage.getItem('id');
+      // Obtén los datos del perfil
+      let profileResponse = await callApiAxios("get", this.$baseURL + `/profile/${id}`, {});
+      if (
+        profileResponse.status != 200 ||
+        Object.values(profileResponse.data).some(value => value === null) ||
+        profileResponse.data.habilidades.some(h => h.id_skill === null || h.sub_habilidad === null || h.habilidad_principal === null)
+      ) {
+        Swal.fire('Error', 'Por favor, completa tu perfil antes de postular o guardar este empleo.', 'error');
+        return;
+      }
+
+      // Obtén los datos de la educación
+      let educationResponse = await callApiAxios("get", this.$baseURL + `/education/get/${id}`, {});
+      if (educationResponse.status != 200 || educationResponse.data.length === 0) {
+        Swal.fire('Error', 'Por favor, completa tus datos de educación antes de postular o guardar este empleo.', 'error');
+        return;
+      }
       console.log("Aqui viene el los Datos del Item", item);
       Swal.fire({
         width: '1400px',
@@ -153,7 +171,8 @@ export default {
         <h2>${item.cargo}</h2>
         <p>${item.nombre}. ${item.comuna}, ${item.region}, Chile (${item.modalidad})</p>
         <br>
-        <p><i class="fa-solid fa-suitcase"></i> Jornada: ${item.jornada} - ${item.experiencia}</p>
+        <p><i class="fa-solid fa-business-time"></i> Experiencia Requerida: ${item.experiencia} año</p>
+        <p><i class="fa-solid fa-suitcase"></i> Jornada: ${item.jornada}</p>
         <p><i class="fa-solid fa-square-check"></i> Aptitudes: ${item.aptitudes}</p>
       </div>
       <div style="margin-top: 20px;" class="data-box">
@@ -182,20 +201,28 @@ export default {
 <style scoped>
 /* Personalización de los botones */
 .btn-custom {
-  background-color: #ffb347; /* color de fondo */
-  color: black; /* color de texto */
-  border: none; /* eliminar el borde */
+  background-color: #ffb347;
+  /* color de fondo */
+  color: black;
+  /* color de texto */
+  border: none;
+  /* eliminar el borde */
 }
 
 .btn-custom:hover {
-  background-color: #ffcc99; /* color de fondo al pasar el mouse */
-  color: black; /* color de texto al pasar el mouse */
+  background-color: #ffcc99;
+  /* color de fondo al pasar el mouse */
+  color: black;
+  /* color de texto al pasar el mouse */
 }
 
 .btn-custom:active {
-  background-color: #ffcc99; /* color de fondo al hacer clic */
-  color: black; /* color de texto al hacer clic */
-  box-shadow: none; /* eliminar la sombra al hacer clic */
+  background-color: #ffcc99;
+  /* color de fondo al hacer clic */
+  color: black;
+  /* color de texto al hacer clic */
+  box-shadow: none;
+  /* eliminar la sombra al hacer clic */
 }
 
 .background-image {
@@ -212,5 +239,6 @@ export default {
 
 .list-group-item.my-list:hover {
   background: linear-gradient(to right, #ffb347, #ffcc99);
-}</style>
+}
+</style>
 

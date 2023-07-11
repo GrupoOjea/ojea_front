@@ -11,56 +11,49 @@
     <div class="card my-list" style="margin: 15px">
       <div class="card-body">
         <form>
-          <div class="form-row">
-
-            <div class="mb-3">
+          <div class="row">
+            <div class="col-md-6 mb-3">
               <label for="inputCargo" class="form-label">Cargo</label>
               <input type="text" class="form-control" id="inputCargo" v-model="cargoTxt">
             </div>
-
-            <div class="mb-3">
+            <div class="col-md-6 mb-3">
               <label for="inputContrato" class="form-label">Tipo de contrato</label>
               <select id="inputContrato" class="form-control" v-model="contratoSelect">
-                <option value="1">A plazo</option>
-                <option value="2">Indefinido</option>
+                <option value="A plazo">A plazo</option>
+                <option value="Indefinido">Indefinido</option>
               </select>
             </div>
-
-            <div class="mb-3">
+            <div class="col-md-6 mb-3">
               <label for="inputJornada" class="form-label">Jornada</label>
               <select id="inputJornada" class="form-control" v-model="jornadaSelect">
-                <option value="1">Jornada completa</option>
-                <option value="2">Part time</option>
+                <option value="Jornada completa">Jornada completa</option>
+                <option value="Part time">Part time</option>
               </select>
             </div>
+            <div class="col-md-6 mb-3">
+  <label for="inputExperiencia" class="form-label">Años de experiencia</label>
+  <div class="d-flex align-items-center">
+    <input type="range" class="form-control-range flex-grow-1 mr-2" id="inputExperiencia" v-model="experienciaSelect" min="0" max="50">
+    <input type="number" class="form-control w-auto" v-model="experienciaSelect" min="0" max="50">
+  </div>
+</div>
 
-            <div class="mb-3">
-              <label for="inputExperiencia" class="form-label">Años de experiencia</label>
-              <select v-model="experienciaSelect" id="inputExperiencia" class="form-control">
-                <option disabled value="">Selecciona una opción...</option>
-                <option v-for="i in 51" :key="i" :value="i - 1">{{ i - 1 }}</option>
-              </select>
-            </div>
-
-            <div class="mb-3">
+            <div class="col-md-6 mb-3">
               <label for="inputModalidad" class="form-label">Modalidad</label>
               <select id="inputModalidad" class="form-control" v-model="modalidadSelect">
-                <option value="1">Hibrido</option>
-                <option value="2">Presencial</option>
-                <option value="3">Teletrabajo</option>
+                <option value="Hibrido">Hibrido</option>
+                <option value="Presencial">Presencial</option>
+                <option value="Teletrabajo">Teletrabajo</option>
               </select>
             </div>
-
-            <div class="mb-3">
+            <div class="col-md-6 mb-3">
               <label for="exampleInputEmail1" class="form-label">Aptitudes</label>
               <input type="text" class="form-control" id="inputAptitudes" v-model="aptitudesTxt">
             </div>
-
-            <div class="mb-3">
+            <div class="col-12 mb-3">
               <label for="exampleInputEmail1" class="form-label">Descripción</label>
-              <input type="text" class="form-control" id="inputDescripcion" v-model="descripcionTxt">
+              <textarea class="form-control" id="inputDescripcion" v-model="descripcionTxt" rows="3"></textarea>
             </div>
-
           </div>
           <br>
           <button type="submit" class="btn btn-primary"
@@ -70,6 +63,9 @@
     </div>
   </div>
 </template>
+
+
+
 
 <script>
 import Swal from 'sweetalert2';
@@ -100,7 +96,6 @@ export default {
 
   },
   methods: {
-
     validateForm() {
       const fields = ['cargoTxt', 'contratoSelect', 'jornadaSelect', 'experienciaSelect', 'modalidadSelect', 'aptitudesTxt', 'descripcionTxt'];
 
@@ -129,7 +124,7 @@ export default {
           'cargo': cargoTxt,
           'contrato': contratoSelect,
           'jornada': jornadaSelect,
-          'experiencia': experienciaSelect,
+          'experiencia': parseInt(experienciaSelect),
           'modalidad': modalidadSelect,
           'aptitudes': aptitudesTxt,
           'descripcion': descripcionTxt,
@@ -157,7 +152,7 @@ export default {
 </script>
 
 <style scoped>
-.icon-button {
+/*.icon-button {
   color: black;
 }
 
@@ -173,5 +168,5 @@ export default {
 
 .my-list {
   background-color: #f8f8f8d5;
-}
+}*/
 </style>

@@ -14,12 +14,18 @@ import RegisterUser from './components/Login/RegisterUser.vue';
 import SearchUser from './components/Search/SearchUser.vue';
 import ProfileUser from './components/Profile/ProfileUser.vue';
 import MyJobs from './components/Jobs/MyJobs.vue';
+import Carrusel from './components/Jobs/Carrusel.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/carrusel',
+    name: 'Carrusel',
+    component: Carrusel,
   },
   {
     path: '/login',
