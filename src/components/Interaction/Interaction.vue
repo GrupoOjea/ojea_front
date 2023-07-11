@@ -16,28 +16,30 @@
       <li class="list-group-item" v-for="job in jobs" :key="job.id">
         <div class="d-flex justify-content-between align-items-start">
           <div>
-            <b>{{ job.texto_habilidades }}</b>
-            <br>
-            {{ job.titulo }} - {{ job.institucion }}
-            <br>
-            {{ job.comuna }}, {{ job.region }}
+            <h5 v-if="job.tipo_empleo == 1">Postulado</h5>
+            <h5 v-else-if="job.tipo_empleo == 2">Guardado</h5>
+            <p>{{ job.titulo }} - {{ job.institucion }}</p>
+            <p>{{ job.comuna }}, {{ job.region }}</p>
           </div>
+
           <div>
-            <button class="btn btn-link icon-button" @click="showViewModal()">
+            <button class="btn btn-link icon-button" v-if="job.tipo_empleo == 1" @click="showViewModal()">
               <i class="fa-regular fa-file"></i>
             </button>
-            <button class="btn btn-link icon-button" @click="showPdfModal()">
-              <i class="fa-regular fa-file-pdf"></i>
+            <button class="btn btn-link icon-button" v-else-if="job.tipo_empleo == 2" @click="showSavedJobModal()">
+              <i class="fa-regular fa-file"></i>
             </button>
-            <button class="btn btn-link icon-button ml-2" @click="showSendMailModal(job)">
+            <!--button class="btn btn-link icon-button ml-2" @click="showSendMailModal(job)">
               <i class="fa-regular fa-envelope"></i>
-            </button>
+            </button-->
           </div>
         </div>
       </li>
     </ul>
   </div>
 </template>
+
+
   
 <script>
 import Swal from 'sweetalert2';
@@ -99,20 +101,91 @@ export default {
       const job = this.jobs[0];
       Swal.fire({
         width: '800px',
-        title: 'Ver Detalle ',
+        title: 'Ver información',
         html: `
+        <br>
         <table class="job-table" style="margin: auto;">
-        <tr><td style="text-align: right;"><b>Telefono:</b></td><td style="text-align: left;"> ${job.telefono}</td></tr>
         <tr><td style="text-align: right;"><b>Región:</b></td><td style="text-align: left;"> ${job.region}</td></tr>
         <tr><td style="text-align: right;"><b>Comuna:</b></td><td style="text-align: left;"> ${job.comuna}</td></tr>
-        <tr><td style="text-align: right;"><b>Profesion:</b></td><td style="text-align: left;"> ${job.profesion}</td></tr>
+        <tr><td style="text-align: right;"><b>Profesion:</b></td><td style="text-align: left;"> ${job.titulo}</td></tr>
         <tr><td style="text-align: right;"><b>Institucion:</b></td><td style="text-align: left;"> ${job.institucion}</td></tr>
-        <tr><td style="text-align: right;"><b>Titulo:</b></td><td style="text-align: left;"> ${job.titulo}</td></tr>
-        <tr><td style="text-align: right;"><b>Aptitudes:</b></td><td style="text-align: left;"> ${job.texto_habilidades}</td></tr>
-      </table>
+        <tr><td style="text-align: right;"><b>Aptitudes:</b></td><td style="text-align: left;"> ${job.habilidades}</td></tr>
+        </table>
         `,
+        showCloseButton: true,
+        showDenyButton: true,
+        confirmButtonText: 'En proceso de seleccion',
+        denyButtonText: 'Rechazar',
+        reverseButtons: true
+      }).then(async (result) => {
+        let estado;
+        let estadoMensaje;
+        if (result.isConfirmed) {
+          estado = 2; // En proceso de seleccion
+          estadoMensaje = 'en proceso de selección';
+        } else if (result.isDenied) {
+          estado = 3; // Rechazado
+          estadoMensaje = 'rechazado';
+        } else {
+          return; // Salir si se presionó el botón de cerrar o se presionó escape
+        }
+        const body = {
+          id: job.id,
+          estado: estado
+        };
+        try {
+          const responseAxios = await callApiAxios('put', this.$baseURL + '/postulation/update-state', body);
+          if (responseAxios.status === 200) {
+            Swal.fire('¡Éxito!', `Estado de la postulación actualizado a ${estadoMensaje} con éxito.`, 'success');
+          } else {
+            Swal.fire('¡Error!', 'Hubo un error al actualizar el estado de la postulación.', 'error');
+          }
+        } catch (error) {
+          Swal.fire('¡Error!', 'Hubo un error al actualizar el estado de la postulación.', 'error');
+        }
       })
     },
+
+    showSavedJobModal() {
+  const job = this.jobs[0];
+  Swal.fire({
+    width: '800px',
+    title: 'Ver información',
+    html: `
+    <br>
+    <table class="job-table" style="margin: auto;">
+    <tr><td style="text-align: right;"><b>Región:</b></td><td style="text-align: left;"> ${job.region}</td></tr>
+    <tr><td style="text-align: right;"><b>Comuna:</b></td><td style="text-align: left;"> ${job.comuna}</td></tr>
+    <tr><td style="text-align: right;"><b>Profesion:</b></td><td style="text-align: left;"> ${job.titulo}</td></tr>
+    <tr><td style="text-align: right;"><b>Institucion:</b></td><td style="text-align: left;"> ${job.institucion}</td></tr>
+    <tr><td style="text-align: right;"><b>Aptitudes:</b></td><td style="text-align: left;"> ${job.habilidades}</td></tr>
+    </table>
+    `,
+    showCloseButton: true,
+    confirmButtonText: ' <i class="fa fa-thumbs-up"></i> Perfil Interesante',
+  }).then(async (result) => {
+    let estado;
+    if (result.isConfirmed) {
+      estado = 4; 
+    } else {
+      return; // Salir si se canceló el modal
+    }
+    const body = {
+      id: job.id,
+      estado: estado
+    };
+    try {
+      const responseAxios = await callApiAxios('put', this.$baseURL + '/postulation/update-state', body);
+      if (responseAxios.status === 200) {
+        Swal.fire('¡Éxito!', `Has marcado este perfil como interesante.`, 'success');
+      } else {
+        Swal.fire('¡Error!', 'Hubo un error al marcar el perfil como interesante.', 'error');
+      }
+    } catch (error) {
+      Swal.fire('¡Error!', 'Hubo un error al marcar el perfil como interesante.', 'error');
+    }
+  })
+},
 
     async showSendMailModal(job) {
       this.isLoading = true;

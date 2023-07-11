@@ -25,11 +25,17 @@
                                 <h5>{{ job.cargo }}</h5>
                                 <p>{{ job.nombre }}</p>
                                 <p>{{ job.comuna }} ({{ job.modalidad }})</p>
+                                <p class="job-status" :class="{
+                                    'estado-pendiente': job.estado === 1,
+                                    'estado-en-proceso': job.estado === 2,
+                                    'estado-no-cumple': job.estado === 3,
+                                    'estado-le-gusta': job.estado === 4
+                                }">{{ job.estadoMensaje }}</p>
                             </div>
 
                             <div class="dropdown dropdown-button">
-                                <button class="btn btn-link dropdown-toggle my-dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn btn-link dropdown-toggle my-dropdown-toggle" type="button"
+                                    id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-list"></i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
@@ -43,20 +49,36 @@
                 </div>
             </div>
 
-            <!-- Para trabajos solicitados -->
+
             <div class="col-sm-6">
                 <div class="card h-100">
                     <div class="card-body">
                         <h4 class="centered-title">Solicitado</h4>
                         <br>
                         <div class="job-item" v-for="(job, index) in requestedJobs" :key="index">
-                            <h5>{{ job.cargo }}</h5>
-                            <p>{{ job.nombre }}</p>
-                            <p>{{ job.comuna }} ({{ job.modalidad }})</p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5>{{ job.cargo }}</h5>
+                                    <p>{{ job.nombre }}</p>
+                                    <p>{{ job.comuna }} ({{ job.modalidad }})</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="job-status" :class="{
+                                        'estado-pendiente': job.estado === 1,
+                                        'estado-en-proceso': job.estado === 2,
+                                        'estado-no-cumple': job.estado === 3,
+                                        'estado-le-gusta': job.estado === 4
+                                    }">{{ job.estadoMensaje }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
+
         </div>
     </div>
 </template>
@@ -91,7 +113,28 @@ export default {
 
             const response = await callApiAxios('get', this.$baseURL + `/postulation/my-jobs/${this.id_profile}`, {});
             const jobs = response.data;
+
+            jobs.forEach(job => {
+                switch (job.estado) {
+                    case 1:
+                        job.estadoMensaje = 'Pendiente';
+                        break;
+                    case 2:
+                        job.estadoMensaje = 'En proceso de selección';
+                        break;
+                    case 3:
+                        job.estadoMensaje = 'No cumple con las habilidades o requisitos';
+                        break;
+                    case 4:
+                        job.estadoMensaje = 'El perfil le gusta a la empresa';
+                        break;
+                    default:
+                        job.estadoMensaje = 'Estado desconocido';
+                }
+            });
+
             console.log(jobs);
+
 
             this.savedJobs = jobs.filter(job => job.tipo_empleo === 2);
             this.requestedJobs = jobs.filter(job => job.tipo_empleo === 1);
@@ -150,24 +193,29 @@ export default {
 .job-container {
     position: relative;
 }
+
 .job-item {
-    margin-bottom: 1em; 
+    margin-bottom: 1em;
 }
+
 .job-item p {
-    margin: 0; 
+    margin: 0;
     padding: 0;
     line-height: 1.5;
 }
+
 .dropdown-button {
     position: absolute;
     right: 0;
     top: 0;
 }
+
 .my-dropdown-toggle::after {
     border-top-color: #ffb347 !important;
 }
+
 .dropdown-button .fas {
-  color: #FFCC99;
+    color: #FFCC99;
 }
 
 .back-button {
@@ -192,8 +240,28 @@ export default {
 .row-margin {
     margin: 15px;
 }
+
 .centered-title {
     text-align: center;
 }
 
+.estado-pendiente {
+    color: blue;
+    /* Por ejemplo, texto azul para estado pendiente */
+}
+
+.estado-en-proceso {
+    color: orange;
+    /* Por ejemplo, texto naranja para estado en proceso de selección */
+}
+
+.estado-no-cumple {
+    color: red;
+    /* Por ejemplo, texto rojo para estado no cumple con las habilidades o requisitos */
+}
+
+.estado-le-gusta {
+    color: green;
+    /* Por ejemplo, texto verde para estado le gusta a la empresa */
+}
 </style>

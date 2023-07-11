@@ -10,7 +10,16 @@
       </div>
     </div>
 
-    <div class="card my-list" style="margin: 15px">
+    <div v-if="jobs.length === 0 && !isLoading" class="card my-list" style="margin: 15px">
+      <div class="card-body">
+        <h5>No tienes ningún empleo publicado.</h5>
+        <router-link :to="{ path: '/form-job' }" class="btn btn-primary">
+          ¿Quieres publicar?
+        </router-link>
+      </div>
+    </div>
+    
+    <div v-else class="card my-list" style="margin: 15px">
       <ul class="list-group list-group-flush">
         <li class="list-group-item my-list" v-for="job in jobs" :key="job.id">
           <div class="d-flex justify-content-between align-items-start">
@@ -21,24 +30,27 @@
               <br>
               {{ job.comuna }} ({{ job.modalidad }})
             </div>
-            <div>
-              <button class="btn btn-link icon-button" @click="redirectTo('/interaction', job.id)" title="Redireccionar">
+            <div class="button-container" @mouseover="showTooltips = true" @mouseleave="showTooltips = false">
+              <button class="btn btn-link icon-button" @click="redirectTo('/interaction', job.id)">
                 <i class="fa-solid fa-chart-line"></i>
               </button>
-              <button class="btn btn-link icon-button" @click="showViewModal(job)" title="Ver">
+              <button class="btn btn-link icon-button" @click="showViewModal(job)">
                 <i class="fa-regular fa-file"></i>
               </button>
-              <button class="btn btn-link icon-button ml-2" @click="showEditModal(job)" title="Editar">
+              <button class="btn btn-link icon-button ml-2" @click="showEditModal(job)">
                 <i class="fa-regular fa-pen-to-square"></i>
               </button>
-
             </div>
           </div>
         </li>
       </ul>
+      <div v-show="showTooltips" class="tooltip">Interacción</div>
+      <div v-show="showTooltips" class="tooltip">Ver Trabajo</div>
+      <div v-show="showTooltips" class="tooltip">Editar</div>
     </div>
   </div>
 </template>
+
 
 <script>
 import Swal from 'sweetalert2';
@@ -50,18 +62,19 @@ export default {
     return {
       jobs: [],
       selectedJob: null,
+      isLoading: true,
+      showTooltips: false
     };
   },
   components: {
     NavbarCompany
   },
   async mounted() {
-    // Comprobar si el usuario está autenticado
     if (localStorage.getItem('isAuthenticated') !== 'true' || localStorage.getItem('tipo_perfil') !== '2') {
       this.$router.push({ name: 'Login' });
       return;
     }
-    this.jobs = await this.fetchData(1);
+    await this.fetchData(1);
   },
   methods: {
     redirectTo(page, id) {
@@ -109,15 +122,15 @@ export default {
           '<div class="swal2-row">' +
           '<label for="swal-input5" class="swal2-input-label">Tipo de Contrato:</label>' +
           '<select id="swal-input5" class="swal2-input">' +
-          '<option value="1">A plazo</option>' +
-          '<option value="2">Indefinido</option>' +
+          '<option value="A plazo">A plazo</option>' +
+          '<option value="Indefinido">Indefinido</option>' +
           '</select>' +
           '</div>' +
           '<div class="swal2-row">' +
           '<label for="swal-input6" class="swal2-input-label">Jornada:</label>' +
           '<select id="swal-input6" class="swal2-input">' +
-          '<option value="1">Jornada completa</option>' +
-          '<option value="2">Part time</option>' +
+          '<option value="Jornada completa">Jornada completa</option>' +
+          '<option value="Part time">Part time</option>' +
           '</select>' +
           '</div>' +
           '<div class="swal2-row">' +
@@ -127,9 +140,9 @@ export default {
           '<div class="swal2-row">' +
           '<label for="swal-input7" class="swal2-input-label">Modalidad:</label>' +
           '<select id="swal-input7" class="swal2-input">' +
-          '<option value="1">Hibrido</option>' +
-          '<option value="2">Presencial</option>' +
-          '<option value="3">Teletrabajo</option>' +
+          '<option value="Hibrido">Hibrido</option>' +
+          '<option value="Presencial">Presencial</option>' +
+          '<option value="Teletrabajo">Teletrabajo</option>' +
           '</select>' +
           '</div>' +
           '<div class="swal2-row">' +
@@ -174,13 +187,21 @@ export default {
     },
 
     async fetchData(id) {
-      let responseAxios = await callApiAxios("get", this.$baseURL + `/jobs/company/${id}`, {});
-      if (responseAxios.status == 200) {
-        return responseAxios.data;
-      } else {
-        console.log("algo salió mal");
-      }
-    },
+  try {
+    let responseAxios = await callApiAxios("get", this.$baseURL + `/jobs/company/${id}`, {});
+    if (responseAxios.status === 200) {
+      this.jobs = responseAxios.data; // Asigna los datos a la variable jobs
+    } else {
+      console.log("Algo salió mal");
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    this.isLoading = false; // Establece isLoading como falso para indicar que se han cargado los datos
+  }
+},
+
+
   }
 };
 </script>
@@ -210,11 +231,26 @@ export default {
   cursor: pointer;
 }
 
-.icon-button:hover::before {
+/*.icon-button:hover::before {
   content: attr(title);
   position: absolute;
   top: -30px;
   right: 2%;
+  transform: translateX(-50%);
+  padding: 5px;
+  background-color: #000;
+  color: #fff;
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+}*/
+
+.tooltip {
+  background-color: red;
+  color: white;
+  position: absolute;
+  top: -30px;
+  left: 50%;
   transform: translateX(-50%);
   padding: 5px;
   background-color: #000;
