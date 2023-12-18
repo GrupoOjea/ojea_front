@@ -5,12 +5,7 @@
     </div>
 
     <!-- Inicio del iframe de Grafana -->
-    <iframe 
-      src="http://52.91.165.159:3000/d/cdd2f87e-5513-4b28-8b36-d526a4ab1bf2/dashboard-ojea?orgId=1&var-empresa=3&kiosk"
-      width="100%"
-      height="800"
-      frameborder="0">
-    </iframe>
+    <iframe v-if="grafanaUrl" :src="grafanaUrl" width="100%" height="800" frameborder="0"></iframe>
     <!-- Fin del iframe de Grafana -->
 
   </div>
