@@ -21,6 +21,7 @@ import ManageJob from './components/Admin/ManageJob.vue';
 import ManageProfile from './components/Admin/ManageProfile.vue';
 import RegisterCompany from './components/Admin/RegisterCompany.vue';
 import RegisterAdmin from './components/Admin/RegisterAdmin.vue';
+import Dashboard from './components/Dashboard/DashboardCompany.vue';
 
 const routes = [
   {
@@ -142,8 +143,12 @@ const routes = [
     name: 'RegisterAdmin',
     component: RegisterAdmin,
     meta: { requiresAuth: true },
-  },
-  {
+  },{
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
+    meta: { requiresAuth: true },
+  },{
     path: '/:catchAll(.*)',
     redirect: '/', // o a donde quieras que se redirija cuando la ruta no existe
   },
