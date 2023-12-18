@@ -23,10 +23,10 @@
           </div>
 
           <div>
-            <button class="btn btn-link icon-button" v-if="job.tipo_empleo == 1" @click="showViewModal()">
+            <button class="btn btn-link icon-button" v-if="job.tipo_empleo == 1" @click="showViewModal(job.id)">
               <i class="fa-regular fa-file"></i>
             </button>
-            <button class="btn btn-link icon-button" v-else-if="job.tipo_empleo == 2" @click="showSavedJobModal()">
+            <button class="btn btn-link icon-button" v-else-if="job.tipo_empleo == 2" @click="showSavedJobModal(job.id)">
               <i class="fa-regular fa-file"></i>
             </button>
             <!--button class="btn btn-link icon-button ml-2" @click="showSendMailModal(job)">
@@ -53,6 +53,7 @@ export default {
   data() {
     return {
       jobs: [],
+      postulados: [],
       selectedJob: null,
       jobId: null,
       postulado: null,
@@ -71,7 +72,7 @@ export default {
       return;
     }
     this.jobId = Number(this.$route.params.id);
-    this.jobs = await this.getInformation();
+    this.jobs = await this.getInformationAll();
     this.getPostulation();
   },
   methods: {
@@ -87,8 +88,8 @@ export default {
       }
     },
 
-    async getInformation() {
-      let responseAxios = await callApiAxios("get", this.$baseURL + `/postulation/information/${this.jobId}`, {});
+    async getInformationAll() {
+      let responseAxios = await callApiAxios("get", this.$baseURL + `/postulation/information/all/${this.jobId}`, {});
       if (responseAxios.status == 200) {
         console.log(responseAxios.data)
         return responseAxios.data;
@@ -97,8 +98,15 @@ export default {
       }
     },
 
-    showViewModal() {
-      const job = this.jobs[0];
+    async showViewModal(id) {
+      let responseAxios = await callApiAxios("get", this.$baseURL + `/postulation/information/${id}`, {});
+      if (responseAxios.status == 200) {
+        console.log(responseAxios.data)
+        this.postulados = responseAxios.data;
+      } else {
+        console.log("algo salió mal");
+      }
+      const job = this.postulados[0];
       Swal.fire({
         width: '800px',
         title: 'Ver información',
@@ -146,27 +154,46 @@ export default {
       })
     },
 
-    showSavedJobModal() {
-  const job = this.jobs[0];
-  Swal.fire({
-    width: '800px',
+    async showSavedJobModal(id) {
+      let responseAxios = await callApiAxios("get", this.$baseURL + `/postulation/information/${id}`, {});
+      if (responseAxios.status == 200) {
+        console.log(responseAxios.data)
+        this.postulados = responseAxios.data;
+      } else {
+        console.log("algo salió mal");
+      }
+      const job = this.postulados[0];
+      Swal.fire({
+    width: '900px',
     title: 'Ver información',
     html: `
-    <br>
-    <table class="job-table" style="margin: auto;">
-    <tr><td style="text-align: right;"><b>Región:</b></td><td style="text-align: left;"> ${job.region}</td></tr>
-    <tr><td style="text-align: right;"><b>Comuna:</b></td><td style="text-align: left;"> ${job.comuna}</td></tr>
-    <tr><td style="text-align: right;"><b>Profesion:</b></td><td style="text-align: left;"> ${job.titulo}</td></tr>
-    <tr><td style="text-align: right;"><b>Institucion:</b></td><td style="text-align: left;"> ${job.institucion}</td></tr>
-    <tr><td style="text-align: right;"><b>Aptitudes:</b></td><td style="text-align: left;"> ${job.habilidades}</td></tr>
-    </table>
+      <style>
+        .job-table { width: 100%; }
+        .job-table td { padding: 0.5em; }
+        .job-table .aptitudes-td { 
+          max-width: 650px; /* Ajusta según sea necesario */
+          overflow-wrap: break-word;
+        }
+        @media (max-width: 600px) {
+          .job-table { font-size: 0.8em; }
+          .job-table .aptitudes-td { max-width: none; }
+        }
+      </style>
+      <br>
+      <table class="job-table" style="margin: auto;">
+        <tr><td style="text-align: right;"><b>Región:</b></td><td style="text-align: left;"> ${job.region}</td></tr>
+        <tr><td style="text-align: right;"><b>Comuna:</b></td><td style="text-align: left;"> ${job.comuna}</td></tr>
+        <tr><td style="text-align: right;"><b>Profesion:</b></td><td style="text-align: left;"> ${job.titulo}</td></tr>
+        <tr><td style="text-align: right;"><b>Institucion:</b></td><td style="text-align: left;"> ${job.institucion}</td></tr>
+        <tr><td style="text-align: right;"><b>Aptitudes:</b></td><td class="aptitudes-td" style="text-align: left;"> ${job.habilidades}</td></tr>
+      </table>
     `,
     showCloseButton: true,
     confirmButtonText: ' <i class="fa fa-thumbs-up"></i> Perfil Interesante',
   }).then(async (result) => {
     let estado;
     if (result.isConfirmed) {
-      estado = 4; 
+      estado = 4;
     } else {
       return; // Salir si se canceló el modal
     }
@@ -185,7 +212,7 @@ export default {
       Swal.fire('¡Error!', 'Hubo un error al marcar el perfil como interesante.', 'error');
     }
   })
-},
+    },
 
     async showSendMailModal(job) {
       this.isLoading = true;

@@ -4,7 +4,7 @@
     <br>
     <div class="jumbotron text-center text-white" id="welcome-section">
       <h1 class="display-4">¡Bienvenido a nuestra aplicación!</h1>
-      <p class="lead">En nuestra aplicación, puedes hacer X, Y y Z.</p>
+      <p class="lead">En nuestra aplicación, puedes Buscar el mejor empleo, de una forma segura.</p>
       <button class="btn btn-dark btn-lg mt-4" @click="goToSignUp">Comienza aquí</button>
     </div>
     <br><br>

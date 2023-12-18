@@ -15,6 +15,12 @@ import SearchUser from './components/Search/SearchUser.vue';
 import ProfileUser from './components/Profile/ProfileUser.vue';
 import MyJobs from './components/Jobs/MyJobs.vue';
 import Carrusel from './components/Jobs/Carrusel.vue';
+import SearchAdmin from './components/Search/SearchAdmin.vue';
+import NavbarAdmin from './components/Navbar/NavbarAdmin.vue';
+import ManageJob from './components/Admin/ManageJob.vue';
+import ManageProfile from './components/Admin/ManageProfile.vue';
+import RegisterCompany from './components/Admin/RegisterCompany.vue';
+import RegisterAdmin from './components/Admin/RegisterAdmin.vue';
 
 const routes = [
   {
@@ -105,6 +111,36 @@ const routes = [
     path: '/my-jobs',
     name: 'MyJobs',
     component: MyJobs,
+    meta: { requiresAuth: true },
+  },{
+    path: '/navbar-admin',
+    name: 'NavbarAdmin',
+    component: NavbarAdmin,
+    meta: { requiresAuth: true },
+  },{
+    path: '/search-admin',
+    name: 'search-admin',
+    component: SearchAdmin,
+    meta: { requiresAuth: true },
+  },{
+    path: '/manage-profile',
+    name: 'ManageProfile',
+    component: ManageProfile,
+    meta: { requiresAuth: true },
+  },{
+    path: '/manage-job',
+    name: 'ManageJob',
+    component: ManageJob,
+    meta: { requiresAuth: true },
+  },{
+    path: '/register-company/:id',
+    name: 'RegisterCompany',
+    component: RegisterCompany,
+    meta: { requiresAuth: true },
+  },{
+    path: '/register-admin',
+    name: 'RegisterAdmin',
+    component: RegisterAdmin,
     meta: { requiresAuth: true },
   },
   {

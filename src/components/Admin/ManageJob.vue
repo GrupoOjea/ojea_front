@@ -1,7 +1,7 @@
 <template>
   <div class="background-image">
     <div>
-      <NavbarCompany></NavbarCompany>
+      <NavbarAdmin></NavbarAdmin>
     </div>
 
     <div class="card my-list" style="margin: 15px">
@@ -56,6 +56,7 @@
 import Swal from 'sweetalert2';
 import NavbarCompany from './../Navbar/NavbarCompany.vue';
 import { callApiAxios } from '../../services/axios.ts';
+import NavbarAdmin from '../Navbar/NavbarAdmin.vue';
 
 export default {
   data() {
@@ -63,20 +64,18 @@ export default {
       jobs: [],
       selectedJob: null,
       isLoading: true,
-      showTooltips: false,
-      idCompany: false,
+      showTooltips: false
     };
   },
   components: {
-    NavbarCompany
-  },
+    NavbarAdmin
+},
   async mounted() {
-    if (localStorage.getItem('isAuthenticated') !== 'true' || localStorage.getItem('tipo_perfil') !== '2') {
+    if (localStorage.getItem('isAuthenticated') !== 'true' || localStorage.getItem('tipo_perfil') !== '3') {
       this.$router.push({ name: 'Login' });
       return;
     }
-    this.idCompany = localStorage.getItem('id_company');
-    await this.fetchData(this.idCompany);
+    await this.fetchData(1);
   },
   methods: {
     redirectTo(page, id) {
@@ -135,10 +134,10 @@ export default {
           '<option value="Part time">Part time</option>' +
           '</select>' +
           '</div>' +
-          /*'<div class="swal2-row">' +
+          '<div class="swal2-row">' +
           '<label for="swal-input9" class="swal2-input-label">Años de experiencia:</label>' +
           '<input id="swal-input9" class="swal2-input" type="number" min="0" max="50" value="' + job.experiencia + '">' +
-          '</div>' +*/
+          '</div>' +
           '<div class="swal2-row">' +
           '<label for="swal-input7" class="swal2-input-label">Modalidad:</label>' +
           '<select id="swal-input7" class="swal2-input">' +

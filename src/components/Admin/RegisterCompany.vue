@@ -1,24 +1,25 @@
 <template>
   <div class="container">
     <div class="row justify-content-center align-items-center vh-100">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <div class="card card-form">
           <div class="card-body">
             <div class="back-button-container">
               <button @click="goBack" class="back-button"><i class="fa-solid fa-arrow-left"></i></button>
             </div>
-            <h2 class="form-title">Completa tus datos personales</h2>
+            <h2 class="form-title">Datos de la Empresa</h2>
             <form style="margin: 15px" @submit.prevent="submitForm">
               <div class="row">
                 <div class="col-md-6 mb-3">
-                  <label for="nameInput" class="form-label">Nombre</label>
+                  <label for="nameInput" class="form-label">Nombre de la empresa</label>
                   <input type="text" class="form-control" id="nameInput" v-model="nameCamelCase" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label for="surnameInput" class="form-label">Apellido</label>
-                  <input type="text" class="form-control" id="surnameInput" v-model="surnameCamelCase" />
+                  <label for="runInput" class="form-label">Run</label>
+                  <input type="text" class="form-control" id="runInput" v-model="run" @input="validateRun" />
                 </div>
+
 
                 <div class="col-md-6 mb-3">
                   <label for="phoneInput" class="form-label">Teléfono</label>
@@ -29,27 +30,6 @@
                     <input type="tel" class="form-control" id="phoneInput" v-model="phone" aria-describedby="phonePrefix"
                       @input="validatePhoneInput" />
                   </div>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                  <label for="professionInput" class="form-label">Profesión</label>
-                  <select class="form-control" id="professionInput" v-model="profession">
-                    <option disabled value="">Selecciona una Profesión</option>
-                    <option v-for="carrera in carreras" :key="carrera.nombre" :value="carrera.nombre">
-                      {{ carrera.nombre }}
-                    </option>
-                  </select>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                  <label for="dobInput" class="form-label">Fecha de Nacimiento</label>
-                  <input type="date" class="form-control" id="dobInput" v-model="birthDate" @change="calculateAge"
-                    :max="minBirthDate" />
-                </div>
-
-                <div class="col-md-6 mb-3">
-                  <label for="ageInput" class="form-label">Edad</label>
-                  <input type="number" class="form-control" id="ageInput" v-model="age" min="0" disabled />
                 </div>
 
                 <div class="col-md-6 mb-3">
@@ -68,10 +48,37 @@
                     <option v-for="comuna in comunas" :key="comuna" :value="comuna">{{ comuna }}</option>
                   </select>
                 </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="rubroInput" class="form-label">Rubro</label>
+                  <input type="text" class="form-control" id="rubroInput" v-model="rubro" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="paginaWebInput" class="form-label">Página web</label>
+                  <input type="text" class="form-control" id="paginaWebInput" v-model="paginaWeb" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="descripcionInput" class="form-label">Descripción</label>
+                  <input type="text" class="form-control" id="descripcionInput" v-model="descripcion" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label for="tipoPlanInput" class="form-label">Tipo de plan</label>
+                  <select class="form-control" id="tipoPlanInput" v-model="tipoPlan">
+                    <option disabled value="">Selecciona un tipo de plan</option>
+                    <option value="1">Silver</option>
+                    <option value="2">Gold</option>
+                    <option value="3">Platinum</option>
+                    <option value="4">Diamond</option>
+                  </select>
+                </div>
+
               </div>
 
               <div class="d-flex justify-content-center mt-4">
-                <button type="submit" class="btn btn-primary btn-enviar">Enviar</button>
+                <button type="submit" class="btn btn-primary btn-enviar">Crear</button>
               </div>
             </form>
           </div>
@@ -86,26 +93,35 @@ import regionesData from "@/utils/region_comuna.json"
 import carrerasData from "@/utils/carreras.json";
 import { callApiAxios } from '../../services/axios.ts';
 import Swal from 'sweetalert2';
+import NavbarAdmin from "../Navbar/NavbarAdmin.vue";
 
 export default {
   data() {
     return {
       name: '',
-      surname: '',
+      run: '',
       phone: '',
-      age: '',
-      profession: '',
       regiones: regionesData.regiones,
       region: '',
       comunas: [],
       comuna: '',
-      birthDate: '',
-      carreras: carrerasData.carreras,
-    }
+      rubro: '',
+      paginaWeb: '',
+      descripcion: '',
+      tipoPlan: '',
+    };
   },
-   mounted() {
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.getItem('tipo_perfil')
+  mounted() {
+    if (localStorage.getItem('isAuthenticated') !== 'true' || localStorage.getItem('tipo_perfil') !== '2') {
+      this.$router.push({ name: 'Login' });
+      return;
+    }
+    Swal.fire({
+      title: 'Bienvenido',
+      text: 'Como es tu primer ingreso, por favor completa los siguientes campos para poder continuar',
+      icon: 'info',
+      confirmButtonText: 'Entendido'
+    });
   },
   methods: {
     updateComunas() {
@@ -113,15 +129,9 @@ export default {
       this.comunas = regionData ? regionData.comunas : [];
     },
     async submitForm() {
-      if (
-        !this.name ||
-        !this.surname ||
-        !this.phone ||
-        !this.profession ||
-        !this.birthDate ||
-        !this.region ||
-        !this.comuna
-      ) {
+      if (!this.name || !this.run || !this.phone || !this.region ||
+        !this.comuna || !this.rubro || !this.descripcion || !this.paginaWeb ||
+        !this.tipoPlan) {
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -132,29 +142,27 @@ export default {
 
       const id = localStorage.getItem('id');
       try {
-        let responseAxios = await callApiAxios('post', this.$baseURL + '/profile/create', {
+        let responseAxios = await callApiAxios('post', this.$baseURL + '/company/create', {
           'nombre': this.name,
-          'apellido': this.surname,
-          'edad': this.age,
-          'profesion': this.profession,
-          'telefono': '+56' + this.phone,
+          'run': this.run,
+          'telefono': this.phone,
           'region': this.region,
           'comuna': this.comuna,
+          'rubro': this.rubro,
+          'descripcion': this.descripcion,
+          'pagina_web': this.paginaWeb,
+          'tipo_plan': parseInt(this.tipoPlan),
           'fk_login': parseInt(id),
         });
 
         if (responseAxios.status == 201) {
-          localStorage.setItem('isAuthenticated', 'true');
-          localStorage.setItem('tipo_perfil', 1)
-          localStorage.setItem('nombre', this.name + ' ' + this.surname);
           Swal.fire({
             icon: 'success',
             title: '¡Buen trabajo!',
             text: 'Datos creados correctamente.',
           }).then((result) => {
             if (result.value) {
-              localStorage.setItem('isAuthenticated', 'true');
-              this.$router.push('/search-user');
+              this.$router.push('/search');
             }
           });
         }
@@ -170,40 +178,33 @@ export default {
         this.phone = this.phone.replace(/[^0-9]/g, "");
       }
     },
-    calculateAge() {
-      let today = {
-        day: new Date().getDate(),
-        month: new Date().getMonth() + 1,
-        year: new Date().getFullYear()
-      };
-
-      let birthDate = {
-        day: new Date(this.birthDate).getDate(),
-        month: new Date(this.birthDate).getMonth() + 1,
-        year: new Date(this.birthDate).getFullYear()
-      };
-
-      if (today.month < birthDate.month || (today.month == birthDate.month && today.day < birthDate.day)) {
-        this.age = today.year - birthDate.year - 1;
-      } else {
-        this.age = today.year - birthDate.year;
-      }
-    },
     toCamelCase(str) {
       return str.toLowerCase().replace(/(^| )(\w)/g, function (x) {
         return x.toUpperCase();
       });
     },
     goBack() {
-      this.$router.push('/');
+      this.$router.push('/manage-profile');
+      localStorage.setItem('isAuthenticated', 'false');
+    },
+    validateRun(event) {
+      let value = event.target.value.replace(/[^0-9kK]+/g, '');
+      value = value.replace(/[\.\-]/g, '');
+
+      if (value.length > 9) {
+        value = value.slice(0, 8) + value.slice(-1);
+      }
+
+      value = value
+        .replace(/(\d{1,2})(\d{0,3})(\d{0,3})([kK0-9]?)$/, (_, p1, p2, p3, p4) => {
+          return p1 + (p2 ? '.' + p2 : '') + (p3 ? '.' + p3 : '') + (p4 ? '-' + p4 : '');
+        });
+
+      event.target.value = value;
+      this.run = value;
     }
   },
   computed: {
-    minBirthDate() {
-      let date = new Date();
-      date.setFullYear(date.getFullYear() - 18);
-      return date.toISOString().split("T")[0];
-    },
     nameCamelCase: {
       get() {
         return this.name;
@@ -211,16 +212,9 @@ export default {
       set(value) {
         this.name = this.toCamelCase(value);
       }
-    },
-    surnameCamelCase: {
-      get() {
-        return this.surname;
-      },
-      set(value) {
-        this.surname = this.toCamelCase(value);
-      }
     }
-  }
+  },
+  components: { NavbarAdmin }
 }
 </script>
 
@@ -242,11 +236,13 @@ export default {
 .btn-enviar:hover {
   background-color: #6d63ffa9;
 }
+
 .back-button-container {
   position: absolute;
   top: 20px;
   left: 20px;
 }
+
 .back-button {
   background-color: transparent;
   color: #000000;

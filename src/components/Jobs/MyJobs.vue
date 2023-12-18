@@ -112,32 +112,32 @@ export default {
             this.id_profile = responseProfile.data.id;
 
             const response = await callApiAxios('get', this.$baseURL + `/postulation/my-jobs/${this.id_profile}`, {});
-            const jobs = response.data;
+        let jobs = response.data;
 
-            jobs.forEach(job => {
-                switch (job.estado) {
-                    case 1:
-                        job.estadoMensaje = 'Pendiente';
-                        break;
-                    case 2:
-                        job.estadoMensaje = 'En proceso de selección';
-                        break;
-                    case 3:
-                        job.estadoMensaje = 'No cumple con las habilidades o requisitos';
-                        break;
-                    case 4:
-                        job.estadoMensaje = 'El perfil le gusta a la empresa';
-                        break;
-                    default:
-                        job.estadoMensaje = 'Estado desconocido';
-                }
-            });
+        jobs = jobs.map(job => {
+            const estado = parseInt(job.estado, 10); // Convert to number if necessary
+            let estadoMensaje = '';
+            switch (estado) {
+                case 1:
+                    estadoMensaje = 'Pendiente';
+                    break;
+                case 2:
+                    estadoMensaje = 'En proceso de selección';
+                    break;
+                case 3:
+                    estadoMensaje = 'No cumple con las habilidades o requisitos';
+                    break;
+                case 4:
+                    estadoMensaje = 'El perfil le gusta a la empresa';
+                    break;
+                default:
+                    estadoMensaje = 'Estado desconocido';
+            }
+            return { ...job, estado, estadoMensaje }; // Add the new properties
+        });
 
-            console.log(jobs);
-
-
-            this.savedJobs = jobs.filter(job => job.tipo_empleo === 2);
-            this.requestedJobs = jobs.filter(job => job.tipo_empleo === 1);
+        this.savedJobs = jobs.filter(job => job.tipo_empleo === '2'); // Check as string if necessary
+        this.requestedJobs = jobs.filter(job => job.tipo_empleo === '1');
 
         } catch (error) {
             console.error(error);

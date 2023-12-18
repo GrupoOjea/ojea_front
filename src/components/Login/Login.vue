@@ -119,7 +119,18 @@ export default {
             localStorage.setItem('isAuthenticated', 'true');
             try {
               const getInformationCompany = await callApiAxios('get', this.$baseURL + `/company/${id}`, {});
-              if (getInformationCompany && getInformationCompany.data) {
+              if (getInformationCompany && getInformationCompany.data && Object.keys(getInformationCompany.data).length > 0) {
+                console.log(getInformationCompany.data)
+                let id_company = getInformationCompany.data.id;
+                let nombre = getInformationCompany.data.nombre;
+                localStorage.setItem('id_company', id_company);
+                localStorage.setItem('nombre', nombre);
+                this.$router.push('/search');
+              } else {
+                //localStorage.setItem('isAuthenticatedLogin', 'true');
+                this.$router.push(`/register-company/${responseAxios.data.id}`);
+              }
+              /*if (getInformationCompany && getInformationCompany.data) {
                 let id_company = getInformationCompany.data.id;
                 let nombre = getInformationCompany.data.nombre;
                 localStorage.setItem('id_company', id_company);
@@ -127,10 +138,29 @@ export default {
                 this.$router.push('/search');
               } else {
                 console.log("La respuesta de la API no tiene el formato esperado");
-              }
+              }*/
             } catch (error) {
               console.log('Error en la llamada a la API:', error);
             }
+          }else if (tipo_perfil == 3) {
+            console.log("Entra aca", tipo_perfil)
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('tipo_perfil', tipo_perfil);
+            this.$router.push('/search-admin');
+            /*try {
+              const getInformationCompany = await callApiAxios('get', this.$baseURL + `/company/${id}`, {});
+              if (getInformationCompany && getInformationCompany.data) {
+                let id_company = getInformationCompany.data.id;
+                let nombre = getInformationCompany.data.nombre;
+                localStorage.setItem('id_company', id_company);
+                localStorage.setItem('nombre', nombre);
+                this.$router.push('/search-admin');
+              } else {
+                console.log("La respuesta de la API no tiene el formato esperado");
+              }
+            } catch (error) {
+              console.log('Error en la llamada a la API:', error);
+            }*/
           } else {
             Swal.fire({
               icon: 'error',

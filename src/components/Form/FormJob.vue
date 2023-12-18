@@ -30,13 +30,14 @@
                 <option value="Part time">Part time</option>
               </select>
             </div>
-            <div class="col-md-6 mb-3">
-  <label for="inputExperiencia" class="form-label">Años de experiencia</label>
-  <div class="d-flex align-items-center">
-    <input type="range" class="form-control-range flex-grow-1 mr-2" id="inputExperiencia" v-model="experienciaSelect" min="0" max="50">
-    <input type="number" class="form-control w-auto" v-model="experienciaSelect" min="0" max="50">
-  </div>
-</div>
+            <!--div class="col-md-6 mb-3">
+              <label for="inputExperiencia" class="form-label">Años de experiencia</label>
+              <div class="d-flex align-items-center">
+                <input type="range" class="form-control-range flex-grow-1 mr-2" id="inputExperiencia"
+                  v-model="experienciaSelect" min="0" max="50">
+                <input type="number" class="form-control w-auto" v-model="experienciaSelect" min="0" max="50">
+              </div>
+            </div-->
 
             <div class="col-md-6 mb-3">
               <label for="inputModalidad" class="form-label">Modalidad</label>
@@ -57,7 +58,7 @@
           </div>
           <br>
           <button type="submit" class="btn btn-primary"
-            @click.prevent="createJob(cargoTxt, contratoSelect, jornadaSelect, experienciaSelect, modalidadSelect, aptitudesTxt, descripcionTxt)">Finalizar</button>
+            @click.prevent="createJob(cargoTxt, contratoSelect, jornadaSelect, /*experienciaSelect,*/ modalidadSelect, aptitudesTxt, descripcionTxt)">Finalizar</button>
         </form>
       </div>
     </div>
@@ -97,7 +98,7 @@ export default {
   },
   methods: {
     validateForm() {
-      const fields = ['cargoTxt', 'contratoSelect', 'jornadaSelect', 'experienciaSelect', 'modalidadSelect', 'aptitudesTxt', 'descripcionTxt'];
+      const fields = ['cargoTxt', 'contratoSelect', 'jornadaSelect', /*'experienciaSelect',*/ 'modalidadSelect', 'aptitudesTxt', 'descripcionTxt'];
 
       for (let field of fields) {
         if (!this[field]) {
@@ -108,7 +109,7 @@ export default {
       return true;
     },
 
-    async createJob(cargoTxt, contratoSelect, jornadaSelect, experienciaSelect, modalidadSelect, aptitudesTxt, descripcionTxt) {
+    async createJob(cargoTxt, contratoSelect, jornadaSelect, /*experienciaSelect,*/ modalidadSelect, aptitudesTxt, descripcionTxt) {
       event.preventDefault();
       if (!this.validateForm()) {
         Swal.fire({
@@ -124,7 +125,7 @@ export default {
           'cargo': cargoTxt,
           'contrato': contratoSelect,
           'jornada': jornadaSelect,
-          'experiencia': parseInt(experienciaSelect),
+          //'experiencia': parseInt(experienciaSelect),
           'modalidad': modalidadSelect,
           'aptitudes': aptitudesTxt,
           'descripcion': descripcionTxt,
