@@ -26,10 +26,10 @@ export default {
         return {
             dataSearch: [],
             slides: [
-                { id: 1, nombre: 'Slide ', descripcion: 'Descripción del Slide 1' },
-                { id: 2, nombre: 'Slide ', descripcion: 'Descripción del Slide 2' },
-                { id: 3, nombre: 'Slide ', descripcion: 'Descripción del Slide 3' },
-                { id: 4, nombre: 'Slide ', descripcion: 'Descripción del Slide 4' },
+                { id: 1, nombre: 'Desarrollador-Backend', descripcion: 'Atech' },
+                { id: 2, nombre: 'Desarrollador-Frontend ', descripcion: 'Atech' },
+                { id: 3, nombre: 'Scrum Master ', descripcion: 'Atech' },
+                /*{ id: 4, nombre: 'Slide ', descripcion: 'Descripción del Slide 4' },
                 { id: 5, nombre: 'Slide ', descripcion: 'Descripción del Slide 5' },
                 { id: 6, nombre: 'Slide ', descripcion: 'Descripción del Slide 6' },
                 { id: 7, nombre: 'Slide ', descripcion: 'Descripción del Slide 7' },
@@ -39,7 +39,7 @@ export default {
                 { id: 11, nombre: 'Slide ', descripcion: 'Descripción del Slide 11' },
                 { id: 12, nombre: 'Slide ', descripcion: 'Descripción del Slide 12' },
                 { id: 13, nombre: 'Slide ', descripcion: 'Descripción del Slide 13' },
-                { id: 14, nombre: 'Slide  ', descripcion: 'Descripción del Slide 14' },
+                { id: 14, nombre: 'Slide  ', descripcion: 'Descripción del Slide 14' },*/
             ],
         };
     },

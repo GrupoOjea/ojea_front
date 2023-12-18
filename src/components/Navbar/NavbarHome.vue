@@ -2,7 +2,7 @@
   <nav class="navbar">
     <div class="container">
       <a class="navbar-brand" href="#">
-        <img src="../../images/Logo_OJEA.png" alt="Ojea">
+        <img src="../../images/Logo_OJEA1.png" alt="Ojea">
       </a>
       <div class="navbar-logo">
         <h1 class="navbar-logo-text">OJEA</h1>
