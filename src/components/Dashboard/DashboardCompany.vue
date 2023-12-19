@@ -1,5 +1,5 @@
 <template>
-  <div class="background-image">
+  <!--div class="background-image"-->
     <div>
       <NavbarCompany> </NavbarCompany>
     </div>
@@ -8,7 +8,7 @@
     <iframe v-if="grafanaUrl" :src="grafanaUrl" width="100%" height="800" frameborder="0"></iframe>
     <!-- Fin del iframe de Grafana -->
 
-  </div>
+  <!--/div-->
 </template>
 
 
@@ -52,8 +52,8 @@ export default {
     fetchCompanyID() {
       const id = localStorage.getItem('id_company');
       if (id) {
-        this.idCompany = id;
-        this.grafanaUrl = `http://52.91.165.159:3000/d/cdd2f87e-5513-4b28-8b36-d526a4ab1bf2/dashboard-ojea?orgId=1&var-empresa=${this.idCompany}&kiosk`;
+        this.idCompany = id; 
+        this.grafanaUrl = `http://52.7.205.254:3000/d/cdd2f87e-5513-4b28-8b36-d526a4ab1bf2/dashboard-ojea?orgId=1&var-empresa=${this.idCompany}&kiosk&refresh=5s`;
       } else {
         console.error('No company ID found');
       }

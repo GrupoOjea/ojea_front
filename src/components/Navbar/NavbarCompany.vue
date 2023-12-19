@@ -38,6 +38,10 @@
                 </router-link>
               </li>
               <li>
+                <router-link :class="{ active: isActiveRoute('/dashboard') }" to="/dashboard" class="dropdown-item">Panel de Indicadores
+                </router-link>
+              </li>
+              <li>
                 <hr class="dropdown-divider" />
               </li>
               <li>

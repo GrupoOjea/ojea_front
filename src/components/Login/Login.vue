@@ -125,7 +125,7 @@ export default {
                 let nombre = getInformationCompany.data.nombre;
                 localStorage.setItem('id_company', id_company);
                 localStorage.setItem('nombre', nombre);
-                this.$router.push('/search');
+                this.$router.push('/dashboard');
               } else {
                 //localStorage.setItem('isAuthenticatedLogin', 'true');
                 this.$router.push(`/register-company/${responseAxios.data.id}`);
@@ -135,7 +135,7 @@ export default {
                 let nombre = getInformationCompany.data.nombre;
                 localStorage.setItem('id_company', id_company);
                 localStorage.setItem('nombre', nombre);
-                this.$router.push('/search');
+                this.$router.push('/dashboard');
               } else {
                 console.log("La respuesta de la API no tiene el formato esperado");
               }*/
