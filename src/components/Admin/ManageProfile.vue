@@ -2,6 +2,7 @@
   <div class="background-image">
     <div>
       <NavbarAdmin></NavbarAdmin>
+      <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage"></Loading>
     </div>
 
     <div class="card my-list" style="margin: 15px">
@@ -38,8 +39,9 @@
 
 <script>
 import Swal from 'sweetalert2';
-import NavbarAdmin from './../Navbar/NavbarAdmin.vue';
+import NavbarAdmin from '../Navbar/NavbarAdmin.vue';
 import { callApiAxios } from '../../services/axios.ts';
+import Loading from 'vue-loading-overlay';
 
 export default {
   data() {
@@ -51,6 +53,7 @@ export default {
     };
   },
   components: {
+    Loading,
     NavbarAdmin
   },
   async mounted() {
@@ -88,8 +91,8 @@ export default {
       '<div class="swal2-row">' +
       '<label for="swal-input12" class="swal2-input-label">Estado de Registro:</label>' +
       '<select id="swal-input12" class="swal2-input">' +
-      '<option value="activo" ' + (profile.estatus_registro === 'activo' ? 'selected' : '') + '>Activo</option>' +
-      '<option value="bloqueado" ' + (profile.estatus_registro !== 'activo' ? 'selected' : '') + '>Bloqueado</option>' +
+      '<option value="1" ' + (profile.estatus_registro === 'activo' ? 'selected' : '') + '>Activo</option>' +
+      '<option value="4" ' + (profile.estatus_registro !== 'activo' ? 'selected' : '') + '>Bloqueado</option>' +
       '</select>' +
       '</div>',
     focusConfirm: false,
@@ -137,13 +140,18 @@ export default {
       profile.contraseña = formValues.newPassword;
     }
 
-    // Actualizar el resto de los valores
+    if (!profile.id || typeof profile.id !== 'number') {
+      Swal.fire('Error', 'El ID del perfil no es válido o está ausente.', 'error');
+      return;
+    }
+    // Actualizar el resto de los valores}
     profile.tipo_perfil = parseInt(formValues.tipoPerfil);
     profile.estatus_registro = formValues.estatusRegistro;
+    
 
     // Llamada a la API para actualizar el perfil
     try {
-      const responseAxios = await callApiAxios("put", this.$baseURL + `/profiles/update`, profile);
+      const responseAxios = await callApiAxios("put", this.$baseURL + `/admin/update`, profile);
       if (responseAxios.status === 200) {
         Swal.fire('Actualizado', 'El perfil ha sido actualizado.', 'success');
       } else {

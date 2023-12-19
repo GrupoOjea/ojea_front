@@ -2,6 +2,7 @@
     <div class="background-image">
         <div v-if="navPerfil">
             <NavbarUser> </NavbarUser>
+            <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage"></Loading>
         </div>
 
         <div class="card card-margin">
@@ -92,9 +93,11 @@ import Swal from 'sweetalert2';
 import regionesData from "@/utils/region_comuna.json";
 import carrerasData from "@/utils/carreras.json";
 import institucionData from "@/utils/institucion.json";
+import Loading from 'vue-loading-overlay';
 
 export default {
     components: {
+        Loading,
         NavbarUser
     },
     data() {
@@ -251,7 +254,13 @@ export default {
             let currentYear = date.getFullYear();
             let months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
             let monthOptions = `<option disabled selected value="">Seleccione Mes</option>` + Array.from({ length: 12 }, (_, i) => `<option value="${months[i]}">${months[i]}</option>`).join('');
-            let yearOptionsInicio = `<option disabled selected value="">Seleccione Año</option>` + Array.from({ length: currentYear - 1950 + 1 }, (_, i) => `<option value="${1950 + i}">${1950 + i}</option>`).join('');
+            // Calcula el año en que el usuario cumplió 18
+    const edadUsuario = this.userProfile.edad; // Suponiendo que este es el campo donde tienes la edad del usuario
+    const anio18 = currentYear - edadUsuario + 18;
+
+    let yearOptionsInicio = `<option disabled selected value="">Seleccione Año</option>` + 
+        Array.from({ length: currentYear - anio18 + 1 }, (_, i) => `<option value="${anio18 + i}">${anio18 + i}</option>`).join('');
+            //let yearOptionsInicio = `<option disabled selected value="">Seleccione Año</option>` + Array.from({ length: currentYear - 1950 + 1 }, (_, i) => `<option value="${1950 + i}">${1950 + i}</option>`).join('');
             let yearOptionsFin = `<option disabled selected value="">Seleccione Año</option>`;
 
             Swal.fire({

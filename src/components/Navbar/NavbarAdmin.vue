@@ -51,7 +51,7 @@
 export default {
   data() {
     return {
-      nombre: 'No tiene usuario empresa'
+      nombre: 'Administrador'
 
     };
   },

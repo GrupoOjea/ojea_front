@@ -230,7 +230,7 @@ export default {
 }
 
 .my-list {
-  background-color: #f8f8f886;
+  background-color: #f8f8f8e0;
 }
 
 .container-fluid-a {

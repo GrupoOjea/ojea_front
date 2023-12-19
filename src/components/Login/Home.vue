@@ -1,6 +1,7 @@
 <template>
   <div id="home-page">
     <NavbarHome></NavbarHome>
+    <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage"></Loading>
     <br>
     <div class="jumbotron text-center text-white" id="welcome-section">
       <h1 class="display-4">¡Bienvenido a nuestra aplicación!</h1>
@@ -66,6 +67,7 @@
 <script>
 import NavbarHome from './../Navbar/NavbarHome.vue';
 import Carrusel from './../Jobs/Carrusel.vue';
+import Loading from 'vue-loading-overlay';
 
 export default {
   data() {
@@ -74,6 +76,7 @@ export default {
     };
   },
   components: {
+    Loading,
     NavbarHome,
     Carrusel
   },

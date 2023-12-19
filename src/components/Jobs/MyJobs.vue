@@ -2,6 +2,7 @@
     <div class="background-image">
         <div v-if="navPerfil">
             <NavbarUser> </NavbarUser>
+            <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage"></Loading>
         </div>
 
         <div class="card card-margin">
@@ -87,9 +88,11 @@
 import { callApiAxios } from '../../services/axios.ts';
 import NavbarUser from './../Navbar/NavbarUser.vue';
 import Swal from 'sweetalert2';
+import Loading from 'vue-loading-overlay';
 
 export default {
     components: {
+        Loading,
         NavbarUser
     },
     data() {

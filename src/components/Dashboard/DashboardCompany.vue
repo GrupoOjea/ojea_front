@@ -2,6 +2,7 @@
   <!--div class="background-image"-->
     <div>
       <NavbarCompany> </NavbarCompany>
+      <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage"></Loading>
     </div>
 
     <!-- Inicio del iframe de Grafana -->
@@ -13,7 +14,7 @@
 
 
 <script>
-import NavbarCompany from './../Navbar/navbarcompany.vue'
+import NavbarCompany from './../Navbar/NavbarCompany.vue'
 import { callApiAxios } from "../../services/axios";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/css/index.css";

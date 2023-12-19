@@ -1,6 +1,7 @@
 <template>
   <div>
     <NavbarAdmin> </NavbarAdmin>
+    <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage"></Loading>
   </div>
   <div class="card my-list" style="margin: 15px">
     <div class="card-body">
@@ -60,6 +61,7 @@
 import Swal from 'sweetalert2';
 import { callApiAxios } from '../../services/axios.ts';
 import NavbarAdmin from '../Navbar/NavbarAdmin.vue';
+import Loading from 'vue-loading-overlay';
 
 export default {
     data() {
@@ -131,7 +133,9 @@ export default {
             this.$router.push('/manage-profile');
         }
     },
-    components: { NavbarAdmin }
+    components: { 
+       Loading,
+       NavbarAdmin }
 }
 </script>
 

@@ -2,6 +2,7 @@
   <div class="background-image">
     <div>
       <NavbarCompany></NavbarCompany>
+      <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage"></Loading>
     </div>
 
     <div class="card my-list" style="margin: 15px">
@@ -56,6 +57,7 @@
 import Swal from 'sweetalert2';
 import NavbarCompany from './../Navbar/NavbarCompany.vue';
 import { callApiAxios } from '../../services/axios.ts';
+import Loading from 'vue-loading-overlay';
 
 export default {
   data() {
@@ -68,6 +70,7 @@ export default {
     };
   },
   components: {
+    Loading,
     NavbarCompany
   },
   async mounted() {
@@ -165,7 +168,7 @@ export default {
             document.getElementById('swal-input6').value,
             document.getElementById('swal-input7').value,
             document.getElementById('swal-input8').value,
-            document.getElementById('swal-input9').value,
+            //document.getElementById('swal-input9').value,
           ]
         }
       })
@@ -178,7 +181,7 @@ export default {
         job.jornada = formValues[5]
         job.modalidad = formValues[6]
         job.aptitudes = formValues[7]
-        job.experiencia = parseInt(formValues[8])
+        //job.experiencia = parseInt(formValues[8])
         let responseAxios = await callApiAxios("put", this.$baseURL + `/jobs/update`, job);
         if (responseAxios.status == 200) {
           Swal.fire('Actualizado', 'El trabajo ha sido actualizado.', 'success');

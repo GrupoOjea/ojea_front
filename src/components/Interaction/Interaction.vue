@@ -108,23 +108,35 @@ export default {
       }
       const job = this.postulados[0];
       Swal.fire({
-        width: '800px',
+        width: '900px',
         title: 'Ver información',
         html: `
-        <br>
-        <table class="job-table" style="margin: auto;">
+        <style>
+        .job-table { width: 100%; }
+        .job-table td { padding: 0.5em; }
+        .job-table .aptitudes-td { 
+          max-width: 650px; /* Ajusta según sea necesario */
+          overflow-wrap: break-word;
+        }
+        @media (max-width: 600px) {
+          .job-table { font-size: 0.8em; }
+          .job-table .aptitudes-td { max-width: none; }
+        }
+      </style>
+      <br>
+      <table class="job-table" style="margin: auto;">
         <tr><td style="text-align: right;"><b>Región:</b></td><td style="text-align: left;"> ${job.region}</td></tr>
         <tr><td style="text-align: right;"><b>Comuna:</b></td><td style="text-align: left;"> ${job.comuna}</td></tr>
         <tr><td style="text-align: right;"><b>Profesion:</b></td><td style="text-align: left;"> ${job.titulo}</td></tr>
         <tr><td style="text-align: right;"><b>Institucion:</b></td><td style="text-align: left;"> ${job.institucion}</td></tr>
-        <tr><td style="text-align: right;"><b>Aptitudes:</b></td><td style="text-align: left;"> ${job.habilidades}</td></tr>
-        </table>
+        <tr><td style="text-align: right;"><b>Aptitudes:</b></td><td class="aptitudes-td" style="text-align: left;"> ${job.habilidades}</td></tr>
+      </table>
         `,
         showCloseButton: true,
         showDenyButton: true,
         confirmButtonText: 'En proceso de seleccion',
         denyButtonText: 'Rechazar',
-        reverseButtons: true
+        reverseButtons: false
       }).then(async (result) => {
         let estado;
         let estadoMensaje;
@@ -164,7 +176,7 @@ export default {
       }
       const job = this.postulados[0];
       Swal.fire({
-    width: '900px',
+    width: '1000px',
     title: 'Ver información',
     html: `
       <style>

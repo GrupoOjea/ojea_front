@@ -2,6 +2,7 @@
   <div class="background-image">
     <div>
       <NavbarUser> </NavbarUser>
+      <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage"></Loading>
     </div>
     <div class="container">
       <div class="row mt-5">
@@ -59,6 +60,7 @@ export default {
       dataLength: 0,
       showCard: false,
       id_profile: {},
+      mensaje: "",
     };
   },
   components: {
@@ -124,9 +126,16 @@ export default {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+        if (type == 2) {
+          this.mensaje = "El empleo se ha guardado con éxito";
+        } else
+          this.mensaje = "La postulación se ha creado con éxito";
+
+
         Swal.fire(
           'Éxito',
-          'La postulación se ha creado con éxito',
+          this.mensaje,
+          //'La postulación se ha creado con éxito',
           'success'
         )
 
@@ -158,20 +167,51 @@ export default {
 
       // Obtén los datos de la educación
       let educationResponse = await callApiAxios("get", this.$baseURL + `/education/get/${id}`, {});
-      if (educationResponse.status != 200 || educationResponse.data.length === 0) {
+      if (!Array.isArray(educationResponse.data) || educationResponse.data.length === 0) {
         Swal.fire('Error', 'Por favor, completa tus datos de educación antes de postular o guardar este empleo.', 'error');
         return;
       }
-      console.log("Aqui viene el los Datos del Item", item);
-      Swal.fire({
-        width: '1400px',
-        heightAuto: false,
-        html: `
+
+
+      let postulationResponse = await callApiAxios('get', this.$baseURL + `/postulation/my-jobs/${this.id_profile}`, {});
+
+      // Verifica solo si hay un error en la respuesta de la API
+      if (postulationResponse.status != 200) {
+        Swal.fire('Error', 'Hubo un problema al obtener tus postulaciones.', 'error');
+        return;
+      }
+
+      // Si postulationResponse.data.length es 0, significa que no hay postulaciones prev
+
+
+      // Verifica si el empleo actual ya fue rechazado (estado = 3)
+      let empleoRechazado = postulationResponse.data.some(postulacion => postulacion.fk_empleo === item.id && postulacion.estado === "3");
+
+      if (empleoRechazado) {
+        // Empleo ya fue rechazado
+        Swal.fire('Información', 'Tu postulación para este empleo ya fue rechazada.', 'info');
+        return; // Termina la ejecución de la función para no mostrar el popup
+      }
+
+
+
+      // Verifica si el empleo actual ya fue guardado o solicitado
+      let empleoYaRegistrado = postulationResponse.data.some(postulacion => postulacion.fk_empleo === item.id && postulacion.tipo_empleo !== "0");
+
+      if (empleoYaRegistrado) {
+        // Empleo ya fue guardado o solicitado
+        Swal.fire('Información', 'Ya tienes un guardado o postulación vigente para este empleo.', 'info');
+      } else {
+
+        console.log("Aqui viene el los Datos del Item", item);
+        Swal.fire({
+          width: '1400px',
+          heightAuto: false,
+          html: `
       <div class="data-box">
         <h2>${item.cargo}</h2>
         <p>${item.nombre}. ${item.comuna}, ${item.region}, Chile (${item.modalidad})</p>
         <br>
-        <p><i class="fa-solid fa-business-time"></i> Experiencia Requerida: ${item.experiencia} año</p>
         <p><i class="fa-solid fa-suitcase"></i> Jornada: ${item.jornada}</p>
         <p><i class="fa-solid fa-square-check"></i> Aptitudes: ${item.aptitudes}</p>
       </div>
@@ -180,18 +220,22 @@ export default {
         <p>${item.descripcion}</p>
       </div>
     `,
-        confirmButtonText: 'Guardar',
-        showCancelButton: true,
-        cancelButtonText: 'Cancelar',
-        preConfirm: () => this.createPostulation(2, item), // para 'Guardar'
-        showDenyButton: true,
-        denyButtonText: 'Solicitar',
-        denyButtonAriaLabel: 'Solicitar'
-      }).then((result) => {
-        if (result.isDenied) {
-          this.createPostulation(1, item); // para 'Solicitar'
-        }
-      })
+          confirmButtonText: 'Guardar',
+          showCancelButton: true,
+          cancelButtonText: 'Cancelar',
+          preConfirm: () => this.createPostulation(2, item), // para 'Guardar'
+          showDenyButton: true,
+          denyButtonText: 'Solicitar',
+          denyButtonAriaLabel: 'Solicitar',
+          customClass: {
+            denyButton: 'deny-button-custom' // aplicando la clase personalizada
+          }
+        }).then((result) => {
+          if (result.isDenied) {
+            this.createPostulation(1, item); // para 'Solicitar'
+          }
+        })
+      }
     }
 
   },
@@ -240,5 +284,15 @@ export default {
 .list-group-item.my-list:hover {
   background: linear-gradient(to right, #ffb347, #ffcc99);
 }
+
+.deny-button-custom {
+  background-color: #ffb347;
+  /* tu color deseado */
+}
 </style>
 
+<style>
+.swal2-container .swal2-actions .deny-button-custom {
+  background-color: #fbba5f !important;
+}
+</style>

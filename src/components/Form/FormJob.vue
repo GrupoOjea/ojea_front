@@ -2,6 +2,7 @@
   <div class="background-image">
     <div>
       <NavbarCompany> </NavbarCompany>
+      <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage"></Loading>
     </div>
     <div class="card my-list" style="margin: 15px">
       <div class="card-body">
@@ -72,6 +73,7 @@
 import Swal from 'sweetalert2';
 import NavbarCompany from './../Navbar/NavbarCompany.vue'
 import { callApiAxios } from '../../services/axios.ts';
+import Loading from 'vue-loading-overlay';
 
 export default {
   data() {
@@ -86,6 +88,7 @@ export default {
     };
   },
   components: {
+    Loading,
     NavbarCompany
   },
   mounted() {
@@ -136,7 +139,7 @@ export default {
           Swal.fire({
             icon: 'success',
             title: 'Éxito',
-            text: 'Registro insertado exitosamente'
+            text: 'Se creo exitosamente el nuevo Empleo'
           }).then(() => {
             location.reload();
           });

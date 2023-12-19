@@ -2,6 +2,7 @@
   <div class="background-image">
     <div>
       <NavbarAdmin></NavbarAdmin>
+      <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage"></Loading>
     </div>
 
     <div class="card my-list" style="margin: 15px">
@@ -54,9 +55,9 @@
 
 <script>
 import Swal from 'sweetalert2';
-import NavbarCompany from './../Navbar/NavbarCompany.vue';
 import { callApiAxios } from '../../services/axios.ts';
 import NavbarAdmin from '../Navbar/NavbarAdmin.vue';
+import Loading from 'vue-loading-overlay';
 
 export default {
   data() {
@@ -68,6 +69,7 @@ export default {
     };
   },
   components: {
+    Loading,
     NavbarAdmin
 },
   async mounted() {

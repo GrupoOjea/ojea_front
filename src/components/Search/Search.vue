@@ -2,6 +2,7 @@
   <div class="background-image">
     <div>
       <NavbarCompany> </NavbarCompany>
+      <Loading v-model:active="isLoading" :can-cancel="true" :is-full-page="fullPage"></Loading>
     </div>
     <div class="container">
       <div class="row mt-5">
@@ -29,7 +30,7 @@
       <ul class="list-group list-group-flush" v-for="(item, index) in dataSearch" :key="index">
 
         <li class="list-group-item my-list">
-          <b>{{ item.texto_habilidades }}</b>
+          <b>{{ item.subhabilidades_agrupadas }}</b>
           <br>
           {{ item.titulo }} - {{ item.institucion }}
           <br>
